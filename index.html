@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Numa Digital Farm | 8-Day IoT Workshop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container navbar">
+      <a class="brand" href="#home" aria-label="Go to home">
+        <span class="brand-mark">IoT</span>
+        <span>
+          Numa Digital Farm
+          <small>8-Day IoT Workshop</small>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#home">Home</a>
+        <a href="#mentors">Mentors</a>
+        <a href="#roadmap">Roadmap</a>
+        <details class="handsout-menu">
+          <summary class="handsout-trigger btn btn-primary">Handsout</summary>
+          <div class="handsout-dropdown" aria-label="Handsout days">
+            <a href="day0.html">Day 0 - Foundation</a>
+            <a href="day1.html">Day 1 - Arduino Basics</a>
+            <a href="day2.html">Day 2 - Wi-Fi and HTTP</a>
+            <a href="day3.html">Day 3 - MQTT Messaging</a>
+            <a href="day4.html">Day 4 - Sensor Data</a>
+            <a href="day5.html">Day 5 - ESP-NOW</a>
+            <a href="day6.html">Day 6 - RFID and Modules</a>
+            <a href="day7.html">Day 7 - Final Prototype</a>
+          </div>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero home-hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">Workshop Day 0 · Foundation Session</div>
+          <h1>Start with a clean <span style="color: var(--primary);">IoT foundation</span> and build forward.</h1>
+          <p class="lead">
+            This workshop introduces the core ideas behind IoT, then moves step by step into Arduino,
+            ESP boards, communication protocols, sensors, and a final working prototype. The structure
+            is intentionally simple so students can focus on learning, not navigation.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="day0.html">Open Day 0 Handout</a>
+            <a class="btn btn-ghost" href="#roadmap">See the 8-Day Roadmap</a>
+          </div>
+          <div class="pills">
+            <span class="pill">Arduino First</span>
+            <span class="pill">ESP32 / ESP8266</span>
+            <span class="pill">Sensors and Actuators</span>
+            <span class="pill">HTTP, MQTT, ESP-NOW</span>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <div class="section-head" style="margin-bottom: 14px;">
+            <div>
+              <h2 style="margin-bottom: 6px;">What students will gain</h2>
+              <p class="hero-note">A practical path from first blink code to a connected device demo.</p>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat">
+              <strong>8</strong>
+              <span>structured learning days</span>
+            </div>
+            <div class="stat">
+              <strong>2</strong>
+              <span>core platforms: Arduino and ESP</span>
+            </div>
+            <div class="stat">
+              <strong>1</strong>
+              <span>final working prototype</span>
+            </div>
+          </div>
+
+          <div class="note success" style="margin-top: 16px;">
+            <strong>Training focus</strong>
+            <p>Hands-on learning, clear examples, and small wins on every session so the workshop feels progressive and concrete.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-tight">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Course snapshot</h2>
+            <p>The homepage stays lean and only carries the most important workshop context.</p>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <article class="card">
+            <h3>Foundations first</h3>
+            <p>Day 0 establishes the language of IoT: sensing, processing, communication, and action.</p>
+          </article>
+          <article class="card">
+            <h3>Build in layers</h3>
+            <p>Students move from local control to connected systems, then to messaging and dashboards.</p>
+          </article>
+          <article class="card">
+            <h3>Prototype mindset</h3>
+            <p>Every topic is meant to support a final device demo, not just isolated theory.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="mentors">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Mentors</h2>
+            <p>Meet the two trainers who will guide the workshop from foundation to prototype delivery.</p>
+          </div>
+        </div>
+
+        <div class="mentor-band">
+          <div class="resource-banner">
+            Resource Person for AI , WEB , and Robotics for NDF.
+          </div>
+
+          <div class="mentor-grid">
+            <article class="trainer-card mentor-card mentor-card-left">
+              <div class="avatar">SP</div>
+              <div class="trainer-meta">
+                <div>
+                  <h3>Er. Sudip Parajuli</h3>
+                  <p>Application Development Farmer at Numa Digital Farm</p>
+                  <p>Co-Founder and CEO at Curio Tech Pvt. Ltd.</p>
+                </div>
+                <p>Focus areas: IoT learning flow, practical coding support, and workshop delivery.</p>
+                <div class="tag-row">
+                  <span class="mini-tag">IoT and Robotics Mentor and Researcher</span>
+                  <span class="mini-tag">Full Stack</span>
+                  <span class="mini-tag">AI</span>
+                </div>
+                <div class="profile-links">
+                  <a class="profile-link" href="https://github.com/sudipnext" target="_blank">GitHub profile</a>
+                  <a class="profile-link secondary" href="https://linkedin.com/in/sudipnext" target="_blank">LinkedIn profile</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="trainer-card mentor-card mentor-card-right">
+              <div class="avatar">sp</div>
+              <div class="trainer-meta">
+                <div>
+                  <h3>Suwarna Pyakurel</h3>
+                  <p>Robotics and IoT Farmer at Numa Digital Farm</p>
+                  <p>Co-Founder and COO at Curio Tech Pvt. Ltd.</p>
+                </div>
+                <p>Focus areas: intelligent systems, robotics thinking, and applied AI/ML direction.</p>
+                <div class="tag-row">
+                  <span class="mini-tag">IoT based smart Solutions</span>
+                  <span class="mini-tag">Robotics</span>
+                  <span class="mini-tag">Applied ML</span>
+                </div>
+                <div class="profile-links">
+                  <a class="profile-link" href="https://github.com/suwarna-wave" target="_blank">GitHub profile</a>
+                  <a class="profile-link secondary" href="https://linkedin.com/in/suwarnapyakurel" target="_blank">LinkedIn profile</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>8-Day Roadmap</h2>
+            <p>The Handsout menu gives direct access to every day, while this view keeps the sequence readable at a glance.</p>
+          </div>
+        </div>
+
+        <div class="roadmap-grid">
+          <a class="day-card roadmap-card" href="day0.html">
+            <span class="day-number">0</span>
+            <h3>IoT foundation</h3>
+            <p>Basics, pins, signals, first blink, and the mindset behind smart devices.</p>
+            <span class="status-tag">Live handout</span>
+          </a>
+          <a class="day-card roadmap-card" href="day1.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">1</span>
+            <h3>Arduino programming</h3>
+            <p>Variables, loops, conditions, functions, and digital/analog I/O practice.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day2.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">2</span>
+            <h3>Wi-Fi and HTTP</h3>
+            <p>Network setup, REST requests, and the first cloud-to-device flow.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day3.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">3</span>
+            <h3>MQTT messaging</h3>
+            <p>Broker, topic design, publish/subscribe, and live message flow.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day4.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">4</span>
+            <h3>Sensor data</h3>
+            <p>Reading sensors, shaping payloads, and sending thresholds to a broker.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day5.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">5</span>
+            <h3>ESP-NOW links</h3>
+            <p>Direct ESP communication, mobile links, and fast local alerts.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day6.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">6</span>
+            <h3>RFID and modules</h3>
+            <p>SPI, displays, relays, servos, and wider hardware integration.</p>
+          </a>
+          <a class="day-card roadmap-card" href="day7.html">
+            <span class="locked">Day page</span>
+            <span class="day-number">7</span>
+            <h3>Final prototype</h3>
+            <p>Dashboard, integration, testing, and polished presentation flow.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="panel soft">
+          <h2 style="margin-bottom: 10px;">Use the Handsout menu</h2>
+          <p class="hero-note">It contains direct navigation to Day 0 through Day 7 so students can move between lessons without hunting through the page.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="panel">
+        <strong>Numa Digital Farm</strong> · 8-Day IoT Workshop
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

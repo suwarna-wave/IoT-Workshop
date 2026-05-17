@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 0 - IoT Workshop Student Handout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container navbar">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">0</span>
+        <span>
+          Numa Digital Farm
+          <small>Day 0 Handout</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#mentors">Mentors</a>
+        <a href="index.html#roadmap">Roadmap</a>
+        <details class="handsout-menu">
+          <summary class="handsout-trigger btn btn-primary">Handsout</summary>
+          <div class="handsout-dropdown" aria-label="Handsout days">
+            <a href="day0.html">Day 0 - Foundation</a>
+            <a href="day1.html">Day 1 - Arduino Basics</a>
+            <a href="day2.html">Day 2 - Wi-Fi and HTTP</a>
+            <a href="day3.html">Day 3 - MQTT Messaging</a>
+            <a href="day4.html">Day 4 - Sensor Data</a>
+            <a href="day5.html">Day 5 - ESP-NOW</a>
+            <a href="day6.html">Day 6 - RFID and Modules</a>
+            <a href="day7.html">Day 7 - Final Prototype</a>
+          </div>
+        </details>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">Workshop Day 0</div>
+          <h1>Introduction to <span style="color: var(--primary);">IoT</span></h1>
+          <p class="lead">
+            This page is the clean, separated Day 0 handout. It covers IoT basics, Arduino pin mapping,
+            signal types, communication protocols, Arduino IDE setup, and first blink programs for Arduino,
+            ESP32, and ESP8266.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#blink">Jump to Code</a>
+            <a class="btn btn-ghost" href="index.html">Back to Home</a>
+          </div>
+          <div class="pills">
+            <span class="pill">IoT Basics</span>
+            <span class="pill">Arduino UNO</span>
+            <span class="pill">ESP32 / ESP8266</span>
+            <span class="pill">Signals + Protocols</span>
+          </div>
+        </div>
+
+        <aside class="panel soft">
+          <h3 style="margin-bottom: 8px;">Learning Goals</h3>
+          <ul style="padding-left: 18px;">
+            <li>Understand what IoT means.</li>
+            <li>Identify sensors, actuators, and microcontrollers.</li>
+            <li>Read Arduino pins, signal types, and protocols.</li>
+            <li>Upload and test the first blink program.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="card-grid">
+          <article class="card">
+            <h3>IoT = Sense + Think + Act</h3>
+            <p>Physical devices become smart when they can sense the world, process data, communicate, and respond.</p>
+          </article>
+          <article class="card">
+            <h3>Arduino First</h3>
+            <p>Arduino is the simplest path to learn basic electronics, pins, and program flow.</p>
+          </article>
+          <article class="card">
+            <h3>ESP Later</h3>
+            <p>ESP32 and ESP8266 add Wi-Fi and make the project ready for real IoT work.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="basics">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>1. What is IoT?</h2>
+            <p>IoT means Internet of Things. It is any physical object that can sense, process, communicate, or respond.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>Real-World Examples</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Normal Device</th>
+                    <th>IoT Version</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Dustbin</td><td>Smart bin that detects fill level</td></tr>
+                  <tr><td>Door lock</td><td>RFID door lock</td></tr>
+                  <tr><td>Light bulb</td><td>Smart light controlled by phone</td></tr>
+                  <tr><td>Water tap</td><td>Touchless smart tap</td></tr>
+                  <tr><td>Parking space</td><td>Smart parking system</td></tr>
+                  <tr><td>Farm field</td><td>Smart irrigation system</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Smart Temperature Flow</h3>
+            <div class="diagram">Temperature sensor reads room temperature → ESP32 processes the reading → Wi-Fi sends the data → Dashboard displays the value → Fan or AC responds</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>2. Basic IoT Architecture</h2>
+            <p>Most IoT systems follow the same flow from the physical world to user action.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="flow-box">[Physical World]
+   ↓
+[Sensors / Actuators]
+   ↓
+[Microcontroller]
+   ↓
+[Communication Network]
+   ↓
+[Cloud / Server / Dashboard]
+   ↓
+[User / Automation / Alert]</div>
+        </div>
+
+        <div class="three-col" style="margin-top: 16px;">
+          <article class="card">
+            <h3>Sensor</h3>
+            <p>Reads real-world data. Examples: DHT11, LDR, MQ-2, ultrasonic.</p>
+          </article>
+          <article class="card">
+            <h3>Actuator</h3>
+            <p>Performs action. Examples: LED, buzzer, relay, servo motor.</p>
+          </article>
+          <article class="card">
+            <h3>Dashboard</h3>
+            <p>Visual display and control layer for web or mobile applications.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pins">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>3. Arduino UNO Pin Mapping</h2>
+            <p>Understanding pins is essential before you connect any sensor or output device.</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pin Type</th>
+                <th>Arduino UNO Pins</th>
+                <th>Use</th>
+                <th>Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Digital</td><td>D0 to D13</td><td>ON/OFF input or output</td><td>LED, button, buzzer</td></tr>
+              <tr><td>Analog</td><td>A0 to A5</td><td>Read changing sensor values</td><td>LDR, potentiometer</td></tr>
+              <tr><td>PWM</td><td>~3, ~5, ~6, ~9, ~10, ~11</td><td>Control output strength</td><td>LED brightness</td></tr>
+              <tr><td>Power</td><td>5V, 3.3V, GND, VIN</td><td>Power components</td><td>Sensor VCC / GND</td></tr>
+              <tr><td>Serial</td><td>D0 RX, D1 TX</td><td>UART communication</td><td>HC-05, GPS</td></tr>
+              <tr><td>I2C</td><td>A4 SDA, A5 SCL</td><td>Two-wire communication</td><td>LCD / OLED</td></tr>
+              <tr><td>SPI</td><td>D10 SS, D11 MOSI, D12 MISO, D13 SCK</td><td>Fast module communication</td><td>RFID RC522</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note success">
+          <strong>Critical rule</strong>
+          <p>Every circuit must have a common GND. Without common ground, the signal may not be read correctly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="signals">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>4. Understanding Signal Types</h2>
+            <p>Different signals represent data in different ways. This is fundamental for IoT work.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <article class="card">
+            <h3>Digital Signal</h3>
+            <p>Only two states: HIGH/LOW, ON/OFF, 1/0.</p>
+            <div class="tag-row">
+              <span class="tag">Button pressed = HIGH</span>
+              <span class="tag">LED OFF = LOW</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Analog Signal</h3>
+            <p>Changes smoothly and can have many values. Arduino UNO reads 0 to 1023.</p>
+            <div class="tag-row">
+              <span class="tag">LDR</span>
+              <span class="tag">Potentiometer</span>
+              <span class="tag">Temperature</span>
+            </div>
+          </article>
+          <article class="card">
+            <h3>PWM Signal</h3>
+            <p>Used to control brightness or speed by switching ON and OFF very fast.</p>
+            <div class="code-block"><pre>analogWrite(pin, value);  // 0 to 255</pre></div>
+          </article>
+          <article class="card">
+            <h3>GPIO</h3>
+            <p>General Purpose Input Output. Most usable pins on Arduino and ESP boards are GPIO pins.</p>
+            <div class="code-block"><pre>pinMode(pin, INPUT);
+pinMode(pin, OUTPUT);</pre></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="protocols">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>5. IoT Communication Protocols</h2>
+            <p>A protocol is a set of rules for how devices communicate with each other.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>Network Protocols</h3>
+            <ul style="padding-left: 18px; margin-top: 6px;">
+              <li><strong>HTTP</strong> - send and request data from web servers</li>
+              <li><strong>MQTT</strong> - lightweight publish/subscribe messaging</li>
+              <li><strong>WebSocket</strong> - live dashboard updates</li>
+              <li><strong>ESP-NOW</strong> - direct ESP-to-ESP communication</li>
+              <li><strong>Bluetooth</strong> - phone-to-device communication</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Hardware Protocols</h3>
+            <ul style="padding-left: 18px; margin-top: 6px;">
+              <li><strong>UART</strong> - TX and RX communication</li>
+              <li><strong>I2C</strong> - SDA and SCL communication</li>
+              <li><strong>SPI</strong> - faster communication with SS, MOSI, MISO, SCK</li>
+              <li><strong>One-Wire</strong> - single data wire for some sensors</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="recap">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>5A. Day 0 Recap</h2>
+            <p>A quick review section with dropdown FAQs so students can revisit the core ideas before moving on.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>What is the main idea of IoT?</summary>
+              <p>IoT is the combination of sensing, processing, communication, and action. A device becomes smart when it can read the environment, decide what to do, communicate that data, and respond.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Why do we start with Arduino before ESP32?</summary>
+              <p>Arduino gives students a cleaner entry into pins, circuits, and control flow. Once those ideas are stable, ESP32 and ESP8266 add Wi-Fi and make the same skills useful for connected systems.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What should I remember about digital, analog, and PWM signals?</summary>
+              <p>Digital signals have two states, analog signals change gradually, and PWM is a fast switching technique used to simulate variable output such as dimming an LED or controlling motor speed.</p>
+            </details>
+            <details class="faq-item">
+              <summary>What is the one rule that prevents many wiring mistakes?</summary>
+              <p>Always share a common ground between the board and the components. If the ground is missing, signals often become unreliable even when the code is correct.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="setup">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>6. Arduino IDE Setup</h2>
+            <p>Arduino IDE is the software where you write and upload code to your board.</p>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <article class="card">
+            <h3>Required Software</h3>
+            <ul style="padding-left: 18px; margin-top: 6px;">
+              <li>Arduino IDE 2.x</li>
+              <li>USB driver</li>
+              <li>ESP32 board package</li>
+              <li>ESP8266 board package</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Arduino UNO Steps</h3>
+            <ol style="padding-left: 18px; margin-top: 6px;">
+              <li>Open Arduino IDE.</li>
+              <li>Connect Arduino UNO using USB.</li>
+              <li>Select <strong>Tools → Board → Arduino Uno</strong>.</li>
+              <li>Select <strong>Tools → Port → COMx</strong>.</li>
+            </ol>
+          </article>
+          <article class="card">
+            <h3>ESP32 Steps</h3>
+            <ol style="padding-left: 18px; margin-top: 6px;">
+              <li>Open Preferences.</li>
+              <li>Add ESP32 board manager URL.</li>
+              <li>Install the board package.</li>
+              <li>Select <strong>ESP32 Dev Module</strong>.</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="blink">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>7. First Code: Blink Programs</h2>
+            <p>Start with the built-in LED on Arduino UNO, then move to an external LED and ESP boards.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>Arduino UNO Built-in LED</h3>
+            <div class="note success">
+              <strong>Built-in LED location</strong>
+              <p>The Arduino UNO built-in LED is connected to pin D13.</p>
+            </div>
+            <div class="code-block"><pre>const int builtInLedPin = 13;
+
+void setup() {
+  pinMode(builtInLedPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(builtInLedPin, HIGH);
+  delay(1000);
+  digitalWrite(builtInLedPin, LOW);
+  delay(1000);
+}</pre></div>
+          </div>
+          <div class="panel">
+            <h3>External LED Blink</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>LED Part</th><th>Connect To</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Long leg / Anode</td><td>D8 through 220Ω resistor</td></tr>
+                  <tr><td>Short leg / Cathode</td><td>GND</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-block"><pre>const int ledPin = 8;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}</pre></div>
+          </div>
+        </div>
+
+        <div class="note warning" style="margin-top: 16px;">
+          <strong>LED safety</strong>
+          <p>Always use a resistor with an LED. Without it, the LED or the board pin can be damaged.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="serial">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>8. Serial Monitor Debugging</h2>
+            <p>Serial output helps you understand what the board is doing while your code runs.</p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="code-block"><pre>const int ledPin = 8;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("Arduino LED Blink Program Started");
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  Serial.println("LED is ON");
+  delay(1000);
+
+  digitalWrite(ledPin, LOW);
+  Serial.println("LED is OFF");
+  delay(1000);
+}</pre></div>
+          <p class="muted"><strong>Serial Monitor setting:</strong> Baud rate 9600 for Arduino UNO. Use the same baud rate in the monitor and in code.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="esp">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>9. Moving from Arduino to ESP</h2>
+            <p>Arduino teaches electronics control. ESP32 and ESP8266 add Wi-Fi and make the project IoT-ready.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <article class="card">
+            <h3>ESP32</h3>
+            <p>Recommended for most workshop labs because it has Wi-Fi, Bluetooth, more GPIOs, and strong IoT support.</p>
+          </article>
+          <article class="card">
+            <h3>ESP8266</h3>
+            <p>Good Wi-Fi board with fewer pins. Useful for low-cost IoT examples.</p>
+          </article>
+        </div>
+
+        <div class="two-col" style="margin-top: 16px;">
+          <div class="panel">
+            <h3>ESP32 Blink</h3>
+            <div class="code-block"><pre>const int ledPin = 2;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(115200);
+  Serial.println("ESP32 LED Blink Program Started");
+}
+
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  Serial.println("ESP32 LED is ON");
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  Serial.println("ESP32 LED is OFF");
+  delay(1000);
+}</pre></div>
+          </div>
+          <div class="panel">
+            <h3>ESP8266 Blink</h3>
+            <div class="note warning">
+              <strong>Active LOW note</strong>
+              <p>Many ESP8266 built-in LEDs work in reverse: LOW turns the LED ON and HIGH turns it OFF.</p>
+            </div>
+            <div class="code-block"><pre>const int ledPin = LED_BUILTIN;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(115200);
+}
+
+void loop() {
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+}</pre></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="safety">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>10. Important Pin Safety</h2>
+            <p>Some pins are safer for beginners than others. Use these as your default starting points.</p>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="note success">
+            <strong>ESP32 safer GPIO pins</strong>
+            <p>GPIO 4, 5, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33</p>
+          </div>
+          <div class="note warning">
+            <strong>Avoid or use carefully</strong>
+            <p>ESP32: GPIO 0, 2, 12, 15. ESP8266: D0, RX, TX for normal beginner circuits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="troubleshooting">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>11. Troubleshooting</h2>
+            <p>When something does not work, use this quick checklist before changing the whole setup.</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Problem</th>
+                <th>Possible Reason</th>
+                <th>Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Board not detected</td><td>Charge-only USB cable</td><td>Use a data USB cable</td></tr>
+              <tr><td>Port not visible</td><td>Driver missing</td><td>Install CH340 or CP210x driver</td></tr>
+              <tr><td>Upload fails</td><td>Wrong board selected</td><td>Select the correct board</td></tr>
+              <tr><td>ESP32 upload fails</td><td>Boot mode issue</td><td>Hold BOOT button during upload</td></tr>
+              <tr><td>LED not blinking</td><td>Wrong pin</td><td>Check board LED pin documentation</td></tr>
+              <tr><td>Serial garbage</td><td>Wrong baud rate</td><td>Match the code and monitor baud rate</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tasks">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>12. Mini Tasks</h2>
+            <p>Use these tasks to practice the Day 0 skills before moving to the next page.</p>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <article class="card"><h3>Task 1</h3><p>Upload built-in LED blink code on Arduino UNO.</p></article>
+          <article class="card"><h3>Task 2</h3><p>Change blink speed from 1000 ms to 300 ms.</p></article>
+          <article class="card"><h3>Task 3</h3><p>Connect an external LED on pin D8 and blink it.</p></article>
+          <article class="card"><h3>Task 4</h3><p>Add Serial Monitor messages to show LED state.</p></article>
+          <article class="card"><h3>Task 5</h3><p>Upload blink code to ESP32 or ESP8266.</p></article>
+          <article class="card"><h3>Task 6</h3><p>Try different delay values and observe the result.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="panel">
+        <strong>Day 0 - IoT Workshop Student Handout</strong>
+        <p style="margin-top: 6px;">Separated from the main workshop hub so the page stays clean and focused.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
