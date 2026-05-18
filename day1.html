@@ -3,43 +3,768 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Day 1 - IoT Workshop</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <title>Day 1 Student Learning Handout | Numa Digital Farm IoT Workshop</title>
+  <style>
+    :root{
+      --navy:#12395b;
+      --blue:#2563eb;
+      --cyan:#06b6d4;
+      --orange:#f97316;
+      --green:#16a34a;
+      --red:#dc2626;
+      --yellow:#facc15;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --soft:#f8fafc;
+      --panel:#ffffff;
+      --line:#dbe4ee;
+      --code:#101827;
+      --radius:20px;
+      --shadow:0 14px 38px rgba(15,23,42,.10);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#f8fbff 0%,#eef7ff 50%,#fff 100%);
+      color:var(--ink);
+      line-height:1.65;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1180px,calc(100% - 34px));margin:auto}
+    header{
+      position:sticky;top:0;z-index:30;
+      background:rgba(255,255,255,.9);backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{min-height:74px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.03em;color:var(--navy)}
+    .brand-mark{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:white;display:grid;place-items:center;box-shadow:0 12px 28px rgba(37,99,235,.25)}
+    .brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .nav-links a,.nav-links button{border:0;background:transparent;padding:9px 12px;border-radius:999px;font-weight:800;color:#334155;cursor:pointer}
+    .nav-links a:hover,.nav-links button:hover{background:#e0f2fe;color:#075985}
+    .hero{padding:62px 0 34px}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+    .eyebrow{display:inline-flex;padding:8px 13px;border-radius:999px;background:#dbeafe;color:#1e40af;font-weight:900;font-size:13px;margin-bottom:16px}
+    h1{font-size:clamp(38px,6vw,72px);line-height:1;letter-spacing:-.07em;margin-bottom:20px;color:var(--navy)}
+    .gradient{background:linear-gradient(135deg,var(--blue),var(--cyan),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:18px;color:#475569;max-width:760px;margin-bottom:22px}
+    .hero-card{background:white;border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:var(--shadow)}
+    .quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+    .quick-box{border:1px solid var(--line);border-radius:18px;padding:14px;background:#f8fafc}
+    .quick-box strong{display:block;color:var(--navy);margin-bottom:2px}
+    .pill-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+    .pill{padding:7px 10px;border-radius:999px;background:white;border:1px solid var(--line);font-weight:800;color:#475569;font-size:13px}
+    .section{padding:42px 0}
+    .section-title{margin-bottom:22px;display:flex;align-items:end;justify-content:space-between;gap:18px}
+    .section-title h2{font-size:clamp(28px,4vw,46px);line-height:1.05;letter-spacing:-.05em;color:var(--navy);margin-bottom:8px}
+    .section-title p{color:var(--muted);max-width:820px}
+    .card{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 10px 28px rgba(15,23,42,.06);margin-bottom:16px}
+    .card h3{font-size:22px;color:var(--navy);letter-spacing:-.03em;margin-bottom:9px}
+    .card h4{font-size:17px;color:#1e3a8a;margin:18px 0 8px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .project-card{background:white;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .project-card::before{content:"";position:absolute;right:-45px;top:-45px;width:130px;height:130px;border-radius:50%;background:rgba(37,99,235,.08)}
+    .project-number{width:42px;height:42px;border-radius:15px;background:#dbeafe;color:#1d4ed8;display:grid;place-items:center;font-weight:900;margin-bottom:12px}
+    .project-card h3{font-size:21px;color:var(--navy);margin-bottom:8px;letter-spacing:-.03em}
+    .project-card p{color:#475569}
+    .mini-label{display:inline-flex;margin-top:10px;margin-right:6px;padding:5px 8px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:900;font-size:12px}
+    table{width:100%;border-collapse:collapse;background:white;min-width:720px}
+    th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
+    th{background:#eaf4ff;color:#12395b;font-weight:900}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px;margin:14px 0}
+    .note{border-left:5px solid var(--orange);background:#fff7ed;border-radius:16px;padding:14px 16px;margin:15px 0;color:#7c2d12}
+    .success{border-left-color:var(--green);background:#f0fdf4;color:#14532d}
+    .warning{border-left-color:var(--red);background:#fef2f2;color:#7f1d1d}
+    .concept-strip{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+    .concept{padding:8px 10px;border-radius:12px;background:#f1f5f9;border:1px solid #e2e8f0;font-weight:800;color:#334155;font-size:13px}
+    .flow{white-space:pre;overflow-x:auto;background:linear-gradient(135deg,#eff6ff,#ecfeff);border:1px solid #bfdbfe;border-radius:18px;padding:16px;font-weight:800;color:#334155;margin:12px 0}
+    .diagram-placeholder{border:3px dashed #93c5fd;border-radius:24px;min-height:300px;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(135deg,#eff6ff,#fff);color:#1e40af;margin:18px 0}
+    .diagram-placeholder span{display:block;font-size:42px;margin-bottom:8px}
+    .diagram-placeholder strong{font-size:22px;display:block;margin-bottom:6px;color:#12395b}
+    .diagram-frame{border:1px solid var(--line);border-radius:24px;padding:14px;background:white;box-shadow:var(--shadow);overflow:hidden;margin:18px 0}
+    .diagram-frame img{display:block;width:100%;height:auto;border-radius:16px;border:1px solid #e2e8f0;background:#fff}
+    .diagram-caption{padding-top:12px;text-align:left;color:#475569}
+    .diagram-caption strong{display:block;color:var(--navy);margin-bottom:4px}
+    .diagram-caption p{margin-bottom:8px}
+    .diagram-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .diagram-meta span{padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:12px;font-weight:900}
+    .asset-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 0}
+    .asset-file{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);color:#334155;font-size:12px;font-weight:900}
+    .asset-link{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:12px;font-weight:900}
+    .asset-link:hover{background:#dbeafe}
+    .code-card{background:var(--code);color:#e2e8f0;border-radius:22px;padding:18px;margin:16px 0;overflow-x:auto;position:relative;border:1px solid #243044}
+    pre{font-family:Consolas,"Liberation Mono",Menlo,monospace;font-size:13px;line-height:1.55;white-space:pre}
+    .copy-btn{position:absolute;right:12px;top:12px;border:0;border-radius:999px;background:#243044;color:white;padding:7px 10px;font-weight:900;cursor:pointer}
+    .copy-btn:hover{background:#334155}
+    .steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+    .step{counter-increment:step;background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:14px 14px 14px 52px;position:relative}
+    .step::before{content:counter(step);position:absolute;left:14px;top:14px;width:26px;height:26px;border-radius:9px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:900}
+    .toc{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+    .toc a{padding:12px;border-radius:16px;background:white;border:1px solid var(--line);font-weight:900;color:#334155;box-shadow:0 5px 16px rgba(15,23,42,.05)}
+    .toc a:hover{background:#eff6ff;color:#1d4ed8}
+    .print-btn{position:fixed;right:18px;bottom:18px;z-index:40;border:0;border-radius:999px;padding:13px 17px;background:var(--navy);color:white;font-weight:900;cursor:pointer;box-shadow:0 16px 34px rgba(15,23,42,.22)}
+    footer{margin-top:44px;padding:30px 0;text-align:center;background:#fff;border-top:1px solid var(--line);color:var(--muted)}
+    @media(max-width:900px){.hero-grid,.grid-2,.grid-3{grid-template-columns:1fr}.toc{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.nav-links{display:none}.quick-grid,.toc{grid-template-columns:1fr}.print-btn{position:static;margin:20px auto;display:block}.hero{padding-top:32px}}
+    @media print{
+      header,.print-btn,.copy-btn{display:none!important}
+      body{background:white}.section,.hero{padding:16px 0}.card,.project-card,.hero-card,.diagram-frame{box-shadow:none;break-inside:avoid}.diagram-placeholder{min-height:220px}.toc{display:none}
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container navbar">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">1</span>
-        <span>
-          Numa Digital Farm
-          <small>Day 1</small>
-        </span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="index.html#home">Home</a>
-        <a href="index.html#mentors">Mentors</a>
-        <a href="index.html#roadmap">Roadmap</a>
-        <details class="handsout-menu">
-          <summary class="handsout-trigger btn btn-primary">Handsout</summary>
-          <div class="handsout-dropdown" aria-label="Handsout days">
-            <a href="day0.html">Day 0 - Foundation</a>
-            <a href="day1.html">Day 1 - Arduino Basics</a>
-            <a href="day2.html">Day 2 - Wi-Fi and HTTP</a>
-            <a href="day3.html">Day 3 - MQTT Messaging</a>
-            <a href="day4.html">Day 4 - Sensor Data</a>
-            <a href="day5.html">Day 5 - ESP-NOW</a>
-            <a href="day6.html">Day 6 - RFID and Modules</a>
-            <a href="day7.html">Day 7 - Final Prototype</a>
-          </div>
-        </details>
-      </nav>
+<header>
+  <div class="container nav">
+    <a href="#top" class="brand"><span class="brand-mark">D1</span><span>Numa Digital Farm<small>IoT Workshop Student Handout</small></span></a>
+    <nav class="nav-links">
+      <a href="#foundation">Foundation</a>
+      <a href="#projects">Projects</a>
+      <a href="#pot">Pot Dimmer</a>
+      <a href="#ldr">Night Lamp</a>
+      <a href="#game">Memory Game</a>
+      <a href="#debug">Debug</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Arduino Programming Fundamentals · Day 1</div>
+        <h1>From blinking LEDs to <span class="gradient">smart interactive circuits.</span></h1>
+        <p class="lead">Today we move beyond Day 0 basics. You will read inputs, control brightness, make decisions using conditions, print debugging data, and build a small memory-lock game in Tinkercad.</p>
+        <div class="pill-row">
+          <span class="pill">Variables</span><span class="pill">if / else</span><span class="pill">Loops</span><span class="pill">Functions</span><span class="pill">Analog Input</span><span class="pill">PWM</span><span class="pill">Buttons</span><span class="pill">Serial Monitor</span>
+        </div>
+        <div class="toc">
+          <a href="#foundation">1. Concepts</a>
+          <a href="#tinkercad">2. Tinkercad Setup</a>
+          <a href="#projects">3. Project Overview</a>
+          <a href="#debug">4. Troubleshooting</a>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h3>What you will complete today</h3>
+        <div class="quick-grid">
+          <div class="quick-box"><strong>Project 1</strong>Potentiometer LED Dimmer</div>
+          <div class="quick-box"><strong>Project 2</strong>Smart Night Lamp with LDR</div>
+          <div class="quick-box"><strong>Project 3</strong>IoT Memory Lock Game</div>
+          <div class="quick-box"><strong>Final Skill</strong>Think like an embedded systems problem-solver</div>
+        </div>
+        <div class="note success"><strong>Learning flow:</strong> manual control → automatic control → interactive game system.</div>
+        <div class="note"><strong>Asset folder:</strong> All diagrams and Arduino sketches are linked from <strong>day1games</strong> so this handout stays synchronized with the workshop materials.</div>
+      </aside>
     </div>
-  </header>
-  <main class="container">
-    <section class="hero"><div class="hero-grid"><div><div class="badge">Workshop Day 1</div><h1>Arduino Programming Fundamentals</h1><p class="lead">This page is separated from Day 0 and reserved for the next lesson. It will cover variables, conditions, loops, and function basics.</p><div class="actions"><a class="btn btn-primary" href="index.html">Back to Home</a><a class="btn btn-ghost" href="day0.html">Review Day 0</a></div></div><aside class="panel"><h3>Planned Topics</h3><ul style="padding-left:18px;"><li>Variables and data types</li><li>Conditions and loops</li><li>Functions and structure</li><li>Digital and analog I/O practice</li></ul></aside></div></section>
-    <section class="section"><div class="panel"><h2>Coming Soon</h2><p>Day 1 content can be added here without affecting the rest of the workshop pages.</p></div></section>
-  </main>
+  </section>
+
+  <section class="section" id="foundation">
+    <div class="container">
+      <div class="section-title">
+        <div><h2>1. Day 1 Foundation Concepts</h2><p>These are the exact ideas used in the three circuits. Read this first before building.</p></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Arduino sketch structure</h3>
+          <p>Every Arduino program has two important functions:</p>
+          <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>void setup() {
+  // Runs once when Arduino starts
+}
+
+void loop() {
+  // Runs again and again forever
+}</pre></div>
+          <p><strong>setup()</strong> is used for pin setup and Serial Monitor setup. <strong>loop()</strong> contains the main repeated logic of the project.</p>
+        </div>
+        <div class="card">
+          <h3>Serial Monitor</h3>
+          <p>The Serial Monitor is your debugging window. It helps you see sensor values, button states, PWM values, and game results.</p>
+          <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>Serial.begin(9600);
+Serial.println("Program Started");
+Serial.print("Sensor value: ");
+Serial.println(sensorValue);</pre></div>
+          <div class="note"><strong>Baud rate rule:</strong> The Serial Monitor baud rate must match <code>Serial.begin()</code>.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Data types you will use today</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Type</th><th>Meaning</th><th>Day 1 Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>const int</code></td><td>A fixed integer value that should not change</td><td><code>const int ledPin = 9;</code></td></tr>
+            <tr><td><code>int</code></td><td>Whole number</td><td>Potentiometer value, LDR value, PWM value</td></tr>
+            <tr><td><code>bool</code></td><td>true or false</td><td>Button state, game correct/wrong status</td></tr>
+            <tr><td><code>unsigned long</code></td><td>Large positive number, useful for time</td><td>Used with <code>millis()</code> in advanced timing</td></tr>
+            <tr><td><code>array</code></td><td>A list of values under one name</td><td>LED pins, button pins, secret game pattern</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card"><h3>Variables</h3><p>Variables store values. In our projects, they store pin numbers, sensor readings, brightness, level, and pattern.</p><div class="code-card"><pre>int lightValue = 0;
+const int ledPin = 9;</pre></div></div>
+        <div class="card"><h3>Conditions</h3><p>Conditions allow Arduino to make decisions.</p><div class="code-card"><pre>if (lightValue < 500) {
+  digitalWrite(ledPin, HIGH);
+} else {
+  digitalWrite(ledPin, LOW);
+}</pre></div></div>
+        <div class="card"><h3>Loops</h3><p>Loops reduce repeated code. They are useful for blinking, reading multiple buttons, and showing patterns.</p><div class="code-card"><pre>for (int i = 0; i < 4; i++) {
+  digitalWrite(ledPins[i], HIGH);
+}</pre></div></div>
+      </div>
+
+      <div class="card">
+        <h3>Digital, Analog, PWM, and Buttons</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Concept</th><th>Simple Meaning</th><th>Arduino Function</th><th>Used In</th></tr></thead>
+          <tbody>
+            <tr><td>Digital Output</td><td>ON/OFF control</td><td><code>digitalWrite()</code></td><td>LED, buzzer</td></tr>
+            <tr><td>Digital Input</td><td>Read ON/OFF state</td><td><code>digitalRead()</code></td><td>Buttons in memory game</td></tr>
+            <tr><td>Analog Input</td><td>Read a changing voltage value</td><td><code>analogRead()</code></td><td>Potentiometer and LDR</td></tr>
+            <tr><td>PWM</td><td>Fast ON/OFF signal that controls brightness</td><td><code>analogWrite()</code></td><td>LED dimmer and smooth night lamp</td></tr>
+            <tr><td>INPUT_PULLUP</td><td>Uses Arduino internal pull-up resistor</td><td><code>pinMode(pin, INPUT_PULLUP)</code></td><td>Game buttons</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><strong>Button logic with INPUT_PULLUP:</strong> not pressed = HIGH, pressed = LOW. The button connects between the Arduino pin and GND.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tinkercad">
+    <div class="container">
+      <div class="section-title"><div><h2>2. Tinkercad Setup Guide</h2><p>Use Tinkercad to safely build, test, and debug before physical hardware.</p></div></div>
+      <div class="card">
+        <div class="steps">
+          <div class="step">Open Tinkercad and go to <strong>Circuits</strong>.</div>
+          <div class="step">Click <strong>Create New Circuit</strong>.</div>
+          <div class="step">Search and drag <strong>Arduino UNO R3</strong> onto the workspace.</div>
+          <div class="step">Add components for the project: LED, resistor, potentiometer, photoresistor, pushbutton, or piezo buzzer.</div>
+          <div class="step">Click a pin to start a wire. Click the destination pin to finish the wire.</div>
+          <div class="step">Use wire colors: red for power, black for GND, yellow/green/blue for signals.</div>
+          <div class="step">Click <strong>Code</strong>, choose <strong>Text</strong>, paste the Arduino code.</div>
+          <div class="step">Click <strong>Start Simulation</strong> and open <strong>Serial Monitor</strong> if needed.</div>
+          <div class="step">Save your circuit with a clear name like <strong>Day1_Project1_Pot_Dimmer</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-title"><div><h2>3. Today’s Three Projects</h2><p>These are selected to build Day 1 skills in a clean learning progression.</p></div></div>
+      <div class="grid-3">
+        <article class="project-card"><div class="project-number">1</div><h3>Potentiometer LED Dimmer</h3><p>Manual control. Rotate a knob and control LED brightness using analog input and PWM.</p><span class="mini-label">analogRead()</span><span class="mini-label">map()</span><span class="mini-label">PWM</span></article>
+        <article class="project-card"><div class="project-number">2</div><h3>Smart Night Lamp with LDR</h3><p>Automatic control. Detect darkness and turn the lamp ON using sensor threshold logic.</p><span class="mini-label">LDR</span><span class="mini-label">if/else</span><span class="mini-label">threshold</span></article>
+        <article class="project-card"><div class="project-number">3</div><h3>IoT Memory Lock Game</h3><p>Interactive system. Repeat a secret LED pattern using buttons. Wrong input triggers alarm.</p><span class="mini-label">arrays</span><span class="mini-label">buttons</span><span class="mini-label">game logic</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pot">
+    <div class="container">
+      <div class="section-title"><div><h2>Project 1: Potentiometer LED Dimmer</h2><p>Manual analog input controls output brightness.</p></div></div>
+      <div class="card">
+        <h3>Objective</h3>
+        <p>Control LED brightness by rotating a potentiometer. This is the easiest way to understand analog input and PWM output.</p>
+        <div class="flow">Potentiometer rotates
+      ↓
+Arduino reads analog value on A0
+      ↓
+Value is mapped from 0–1023 to 0–255
+      ↓
+PWM controls LED brightness on D11</div>
+        <div class="concept-strip"><span class="concept">Analog input</span><span class="concept">PWM output</span><span class="concept">map()</span><span class="concept">Serial Monitor</span><span class="concept">Variables</span></div>
+      </div>
+
+      <figure class="diagram-frame">
+        <img src="day1games/potentiometer%20LED%20Dimmer.png" alt="Potentiometer LED Dimmer circuit diagram" />
+        <figcaption class="diagram-caption">
+          <strong>Circuit Diagram 1</strong>
+          <p>Potentiometer LED Dimmer circuit screenshot from Tinkercad.</p>
+          <div class="diagram-meta"><span>Recommended size: 1200 × 700 px</span><a class="asset-link" href="day1games/potentiometer%20LED%20Dimmer.png">Open image</a></div>
+        </figcaption>
+      </figure>
+
+      <div class="grid-2">
+        <div class="card"><h3>Components</h3><div class="table-wrap"><table><thead><tr><th>Component</th><th>Quantity</th></tr></thead><tbody><tr><td>Arduino UNO R3</td><td>1</td></tr><tr><td>Potentiometer</td><td>1</td></tr><tr><td>LED</td><td>1</td></tr><tr><td>220Ω resistor</td><td>1</td></tr><tr><td>Breadboard</td><td>1</td></tr><tr><td>Jumper wires</td><td>Few</td></tr></tbody></table></div></div>
+        <div class="card"><h3>Wiring</h3><div class="table-wrap"><table><thead><tr><th>Part</th><th>Connect To</th><th>Purpose</th></tr></thead><tbody><tr><td>Pot left pin</td><td>5V</td><td>Power side</td></tr><tr><td>Pot middle pin</td><td>A0</td><td>Analog signal</td></tr><tr><td>Pot right pin</td><td>GND</td><td>Ground side</td></tr><tr><td>LED long leg</td><td>D11 through 220Ω</td><td>PWM brightness</td></tr><tr><td>LED short leg</td><td>GND</td><td>Return path</td></tr></tbody></table></div></div>
+      </div>
+
+      <div class="card">
+        <h3>Code: Potentiometer LED Dimmer</h3>
+        <div class="asset-bar"><span class="asset-file">Source file: day1games/LED_DIMMER_code-potentiometer.ino</span><a class="asset-link" href="day1games/LED_DIMMER_code-potentiometer.ino">Open file</a></div>
+        <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/*
+  Day 1 Project 1: Potentiometer LED Dimmer
+  Board: Arduino UNO
+  Platform: Tinkercad Circuits
+
+  Concept:
+  - Read analog value from potentiometer
+  - Convert it to PWM value
+  - Control LED brightness
+  - Print values on Serial Monitor
+*/
+
+const int potentiometerPin = A0;
+const int ledPin = 11;   // PWM pin on Arduino UNO
+
+int potentiometerValue = 0;
+int ledBrightness = 0;
+
+unsigned long lastPrintTime = 0;
+const unsigned long printInterval = 300;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+
+  Serial.begin(9600);
+  Serial.println("Potentiometer LED Dimmer Started");
+  Serial.println("--------------------------------");
+}
+
+void loop() {
+  // Read analog value from potentiometer: 0 to 1023
+  potentiometerValue = analogRead(potentiometerPin);
+
+  // Convert 0-1023 range to 0-255 PWM range
+  ledBrightness = map(potentiometerValue, 0, 1023, 0, 255);
+
+  // Control LED brightness
+  analogWrite(ledPin, ledBrightness);
+
+  // Print values every 300 ms without slowing the main logic too much
+  if (millis() - lastPrintTime >= printInterval) {
+    lastPrintTime = millis();
+
+    Serial.print("Potentiometer Value: ");
+    Serial.print(potentiometerValue);
+
+    Serial.print(" | LED Brightness: ");
+    Serial.println(ledBrightness);
+  }
+}</pre></div>
+        <h4>Expected Serial Monitor Output</h4>
+        <div class="code-card"><pre>Potentiometer LED Dimmer Started
+--------------------------------
+Potentiometer Value: 0 | LED Brightness: 0
+Potentiometer Value: 526 | LED Brightness: 131
+Potentiometer Value: 1023 | LED Brightness: 255</pre></div>
+        <div class="note success"><strong>Challenge:</strong> Add conditions: below 300 = LED OFF, 300–700 = medium brightness, above 700 = full brightness.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="ldr">
+    <div class="container">
+      <div class="section-title"><div><h2>Project 2: Smart Night Lamp with LDR</h2><p>Automatic lighting based on environmental brightness.</p></div></div>
+      <div class="card">
+        <h3>Objective</h3>
+        <p>Use a photoresistor/LDR to detect light level. When the environment is dark, the LED turns ON automatically.</p>
+        <div class="flow">Light level changes
+      ↓
+LDR resistance changes
+      ↓
+Arduino reads A0 value
+      ↓
+if value is below threshold → lamp ON
+else → lamp OFF</div>
+        <div class="concept-strip"><span class="concept">LDR</span><span class="concept">Voltage divider</span><span class="concept">analogRead()</span><span class="concept">Threshold</span><span class="concept">if/else</span></div>
+      </div>
+
+      <figure class="diagram-frame">
+        <img src="day1games/ldr-led-dimmer-circuit.png" alt="Smart Night Lamp with LDR circuit diagram" />
+        <figcaption class="diagram-caption">
+          <strong>Circuit Diagram 2</strong>
+          <p>Smart Night Lamp with LDR circuit screenshot from Tinkercad.</p>
+          <div class="diagram-meta"><span>Recommended size: 1200 × 700 px</span><a class="asset-link" href="day1games/ldr-led-dimmer-circuit.png">Open image</a></div>
+        </figcaption>
+      </figure>
+
+      <div class="grid-2">
+        <div class="card"><h3>Components</h3><div class="table-wrap"><table><thead><tr><th>Component</th><th>Quantity</th></tr></thead><tbody><tr><td>Arduino UNO R3</td><td>1</td></tr><tr><td>Photoresistor / LDR</td><td>1</td></tr><tr><td>10kΩ resistor</td><td>1</td></tr><tr><td>LED</td><td>1</td></tr><tr><td>220Ω resistor</td><td>1</td></tr><tr><td>Breadboard</td><td>1</td></tr><tr><td>Jumper wires</td><td>Few</td></tr></tbody></table></div></div>
+        <div class="card"><h3>Wiring</h3><div class="table-wrap"><table><thead><tr><th>Part</th><th>Connect To</th><th>Purpose</th></tr></thead><tbody><tr><td>One LDR leg</td><td>5V</td><td>Power side</td></tr><tr><td>Other LDR leg</td><td>A0 junction</td><td>Signal point</td></tr><tr><td>10kΩ resistor</td><td>A0 junction to GND</td><td>Voltage divider</td></tr><tr><td>LED long leg</td><td>D9 through 220Ω</td><td>Lamp output</td></tr><tr><td>LED short leg</td><td>GND</td><td>Return path</td></tr></tbody></table></div></div>
+      </div>
+      <div class="note"><strong>Tinkercad note:</strong> The LDR component is named <strong>Photoresistor</strong>. During simulation, click it and adjust the light slider.</div>
+
+      <div class="card">
+        <h3>Code: Smart Night Lamp</h3>
+        <div class="asset-bar"><span class="asset-file">Source file: day1games/ldr-led-dimmer-code.ino</span><a class="asset-link" href="day1games/ldr-led-dimmer-code.ino">Open file</a></div>
+        <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>const int ldrPin = A0;
+const int lampLedPin = 9;
+
+int lightValue = 0;
+const int darknessThreshold = 500;
+
+void setup() {
+  pinMode(lampLedPin, OUTPUT);
+
+  Serial.begin(9600);
+  Serial.println("Smart Night Lamp Started");
+}
+
+void loop() {
+  lightValue = analogRead(ldrPin);
+
+  Serial.print("Light Value: ");
+  Serial.print(lightValue);
+
+  if (lightValue < darknessThreshold) {
+    digitalWrite(lampLedPin, HIGH);
+    Serial.println(" | DARK - Lamp ON");
+  } else {
+    digitalWrite(lampLedPin, LOW);
+    Serial.println(" | BRIGHT - Lamp OFF");
+  }
+
+  delay(500);
+}</pre></div>
+        <h4>Expected Serial Monitor Output</h4>
+        <div class="code-card"><pre>Smart Night Lamp Started
+Light Value: 821 | BRIGHT - Lamp OFF
+Light Value: 612 | BRIGHT - Lamp OFF
+Light Value: 433 | DARK - Lamp ON
+Light Value: 210 | DARK - Lamp ON</pre></div>
+        <div class="note warning"><strong>If the behavior is reversed:</strong> change <code>if (lightValue &lt; darknessThreshold)</code> to <code>if (lightValue &gt; darknessThreshold)</code>. This depends on how the voltage divider is wired.</div>
+      </div>
+
+      <div class="card">
+        <h3>Improved Version: Smooth Night Lamp</h3>
+        <p>This version makes the LED gradually brighter as the room gets darker.</p>
+        <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>const int ldrPin = A0;
+const int lampLedPin = 9;
+
+int lightValue = 0;
+int brightness = 0;
+
+void setup() {
+  pinMode(lampLedPin, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("Smooth Smart Night Lamp Started");
+}
+
+void loop() {
+  lightValue = analogRead(ldrPin);
+
+  // For this wiring: dark = lower value, bright = higher value
+  brightness = map(lightValue, 0, 1023, 255, 0);
+  brightness = constrain(brightness, 0, 255);
+
+  analogWrite(lampLedPin, brightness);
+
+  Serial.print("Light Value: ");
+  Serial.print(lightValue);
+  Serial.print(" | LED Brightness: ");
+  Serial.println(brightness);
+
+  delay(500);
+}</pre></div>
+        <div class="note success"><strong>Challenge:</strong> Create three states: Bright = OFF, Medium = dim, Dark = full brightness.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="game">
+    <div class="container">
+      <div class="section-title"><div><h2>Project 3: IoT Memory Lock Game</h2><p>An interactive game that uses LEDs, buttons, buzzer, arrays, loops, and conditions.</p></div></div>
+      <div class="card">
+        <h3>Objective</h3>
+        <p>Arduino shows a secret LED pattern. The player must repeat it using buttons. Correct pattern increases the level. Wrong input triggers an alarm and restarts the game.</p>
+        <div class="flow">Arduino creates random pattern
+      ↓
+LEDs show pattern
+      ↓
+Player presses buttons in same order
+      ↓
+Correct → next level
+Wrong → buzzer alarm + restart</div>
+        <div class="concept-strip"><span class="concept">Arrays</span><span class="concept">for loops</span><span class="concept">functions</span><span class="concept">buttons</span><span class="concept">INPUT_PULLUP</span><span class="concept">buzzer</span><span class="concept">game logic</span></div>
+      </div>
+
+      <figure class="diagram-frame">
+        <img src="day1games/memorygame.png" alt="IoT Memory Lock Game circuit diagram" />
+        <figcaption class="diagram-caption">
+          <strong>Circuit Diagram 3</strong>
+          <p>IoT Memory Lock Game circuit screenshot from Tinkercad.</p>
+          <div class="diagram-meta"><span>Recommended size: 1200 × 700 px</span><a class="asset-link" href="day1games/memorygame.png">Open image</a></div>
+        </figcaption>
+      </figure>
+
+      <div class="grid-2">
+        <div class="card"><h3>Components</h3><div class="table-wrap"><table><thead><tr><th>Component</th><th>Quantity</th></tr></thead><tbody><tr><td>Arduino UNO R3</td><td>1</td></tr><tr><td>LEDs</td><td>4</td></tr><tr><td>220Ω resistors</td><td>4</td></tr><tr><td>Pushbuttons</td><td>4</td></tr><tr><td>Piezo buzzer</td><td>1</td></tr><tr><td>Breadboard</td><td>1</td></tr><tr><td>Jumper wires</td><td>Many</td></tr></tbody></table></div></div>
+        <div class="card"><h3>Pin Mapping</h3><div class="table-wrap"><table><thead><tr><th>Part</th><th>Arduino Pin</th><th>Note</th></tr></thead><tbody><tr><td>Red LED</td><td>D8</td><td>Through 220Ω resistor</td></tr><tr><td>Yellow LED</td><td>D9</td><td>Through 220Ω resistor</td></tr><tr><td>Green LED</td><td>D10</td><td>Through 220Ω resistor</td></tr><tr><td>Blue LED</td><td>D11</td><td>Through 220Ω resistor</td></tr><tr><td>Red Button</td><td>D2</td><td>Button to GND</td></tr><tr><td>Yellow Button</td><td>D3</td><td>Button to GND</td></tr><tr><td>Green Button</td><td>D4</td><td>Button to GND</td></tr><tr><td>Blue Button</td><td>D5</td><td>Button to GND</td></tr><tr><td>Buzzer +</td><td>D6</td><td>Buzzer - to GND</td></tr></tbody></table></div></div>
+      </div>
+
+      <div class="note"><strong>INPUT_PULLUP wiring:</strong> Button pin → button → GND. No 10k resistor is needed. In code, pressed = LOW and not pressed = HIGH.</div>
+
+      <div class="card">
+        <h3>Code: Simple IoT Memory Lock Game</h3>
+        <div class="asset-bar"><span class="asset-file">Source file: day1games/memory_game.ino</span><a class="asset-link" href="day1games/memory_game.ino">Open file</a></div>
+        <div class="code-card"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/*
+      Day 1 Project: Simple IoT Memory Lock Game
+  Board: Arduino UNO
+  Platform: Tinkercad
+
+  Game:
+  - Arduino shows a random LED pattern.
+  - Player repeats the pattern using buttons.
+  - Correct pattern increases level.
+  - Wrong pattern triggers buzzer alarm and restarts.
+
+  Buttons use INPUT_PULLUP:
+  Not pressed = HIGH
+  Pressed     = LOW
+*/
+
+const int totalColors = 4;
+const int maxLevel = 5;
+
+// LED pins: Red, Yellow, Green, Blue
+const int ledPins[totalColors] = {8, 9, 10, 11};
+
+// Button pins: Red, Yellow, Green, Blue
+const int buttonPins[totalColors] = {2, 3, 4, 5};
+
+const int buzzerPin = 6;
+
+// Pattern storage
+int pattern[maxLevel];
+
+// Game starts at level 1
+int level = 1;
+
+void setup() {
+  Serial.begin(9600);
+
+  // Set LED and button pins
+  for (int i = 0; i < totalColors; i++) {
+    pinMode(ledPins[i], OUTPUT);
+    pinMode(buttonPins[i], INPUT_PULLUP);
+  }
+
+  pinMode(buzzerPin, OUTPUT);
+
+  randomSeed(analogRead(A0));
+
+  Serial.println("================================");
+  Serial.println(" Simple IoT Memory Lock Game");
+  Serial.println("================================");
+  Serial.println("Watch the LED pattern.");
+  Serial.println("Repeat it using the buttons.");
+  Serial.println("Wrong input = alarm + restart.");
+  Serial.println();
+
+  makeNewPattern();
+}
+
+void loop() {
+  Serial.println("----------------------------");
+  Serial.print("Level: ");
+  Serial.println(level);
+  Serial.println("Watch the pattern...");
+
+  delay(1000);
+
+  // Show pattern up to current level
+  for (int i = 0; i < level; i++) {
+    int color = pattern[i];
+
+    blinkColor(color, 900);
+    delay(450);
+  }
+
+  Serial.println("Now repeat the pattern.");
+
+  // Check player input
+  for (int i = 0; i < level; i++) {
+    int expectedColor = pattern[i];
+    int pressedColor = waitForButton();
+
+    blinkColor(pressedColor, 300);
+
+    Serial.print("Expected: ");
+    Serial.print(expectedColor);
+    Serial.print(" | Pressed: ");
+    Serial.println(pressedColor);
+
+    if (pressedColor != expectedColor) {
+      wrongAnswer();
+      return;
+    }
+  }
+
+  correctAnswer();
+}
+
+// Create random pattern
+void makeNewPattern() {
+  for (int i = 0; i < maxLevel; i++) {
+    pattern[i] = random(0, totalColors);
+  }
+}
+
+// Blink selected LED and play tone
+void blinkColor(int color, int timeMs) {
+  digitalWrite(ledPins[color], HIGH);
+  tone(buzzerPin, 400 + color * 180);
+
+  delay(timeMs);
+
+  digitalWrite(ledPins[color], LOW);
+  noTone(buzzerPin);
+}
+
+// Wait until one button is pressed
+int waitForButton() {
+  while (true) {
+    for (int i = 0; i < totalColors; i++) {
+      if (digitalRead(buttonPins[i]) == LOW) {
+        delay(50); // debounce
+
+        while (digitalRead(buttonPins[i]) == LOW) {
+          delay(10); // wait until button is released
+        }
+
+        return i;
+      }
+    }
+  }
+}
+
+void correctAnswer() {
+  Serial.println("Correct!");
+  successSound();
+
+  level++;
+
+  if (level > maxLevel) {
+    Serial.println("ACCESS GRANTED!");
+    Serial.println("You completed all levels.");
+    celebration();
+
+    level = 1;
+    makeNewPattern();
+  }
+
+  delay(1200);
+}
+
+void wrongAnswer() {
+  Serial.println("Wrong!");
+  Serial.println("ACCESS DENIED! Restarting from Level 1.");
+
+  alarm();
+
+  level = 1;
+  makeNewPattern();
+
+  delay(1500);
+}
+
+void successSound() {
+  tone(buzzerPin, 700);
+  delay(200);
+  tone(buzzerPin, 1000);
+  delay(250);
+  noTone(buzzerPin);
+}
+
+void alarm() {
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < totalColors; j++) {
+      digitalWrite(ledPins[j], HIGH);
+    }
+
+    tone(buzzerPin, 180);
+    delay(250);
+
+    for (int j = 0; j < totalColors; j++) {
+      digitalWrite(ledPins[j], LOW);
+    }
+
+    noTone(buzzerPin);
+    delay(250);
+  }
+}
+
+void celebration() {
+  for (int round = 0; round < 3; round++) {
+    for (int i = 0; i < totalColors; i++) {
+      blinkColor(i, 200);
+      delay(100);
+    }
+  }
+}</pre></div>
+        <h4>Color Number Meaning</h4>
+        <div class="table-wrap"><table><thead><tr><th>Number</th><th>Color</th><th>LED/Button</th></tr></thead><tbody><tr><td>0</td><td>Red</td><td>D8 LED / D2 Button</td></tr><tr><td>1</td><td>Yellow</td><td>D9 LED / D3 Button</td></tr><tr><td>2</td><td>Green</td><td>D10 LED / D4 Button</td></tr><tr><td>3</td><td>Blue</td><td>D11 LED / D5 Button</td></tr></tbody></table></div>
+        <h4>Expected Serial Monitor Output</h4>
+        <div class="code-card"><pre>Simple IoT Memory Lock Game
+Watch the LED pattern.
+Repeat it using the buttons.
+Wrong input = alarm + restart.
+
+----------------------------
+Level: 1
+Watch the pattern...
+Now repeat the pattern.
+Expected: 2 | Pressed: 2
+Correct!</pre></div>
+        <div class="note success"><strong>Challenge:</strong> Change <code>maxLevel</code> from 5 to 3 for beginners or 8 for a harder game.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="debug">
+    <div class="container">
+      <div class="section-title"><div><h2>4. Debugging and Common Errors</h2><p>Use this section whenever something does not work.</p></div></div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Problem</th><th>Likely Cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>LED does not light</td><td>LED reversed, wrong pin, missing resistor</td><td>Check long leg/anode, code pin, and 220Ω resistor</td></tr>
+            <tr><td>LED always full brightness</td><td>Not using PWM pin or wrong code</td><td>Use D9 for PWM on Arduino UNO and <code>analogWrite()</code></td></tr>
+            <tr><td>Potentiometer value not changing</td><td>Middle pin not connected to A0</td><td>Connect middle/wiper pin to A0</td></tr>
+            <tr><td>LDR value reversed</td><td>Voltage divider direction differs</td><td>Reverse condition or swap LDR/resistor position</td></tr>
+            <tr><td>Button always pressed</td><td>Wrong button legs or missing GND reference</td><td>Place button across breadboard gap and check wiring</td></tr>
+            <tr><td>Memory game button does nothing</td><td>INPUT_PULLUP logic misunderstood</td><td>Button must connect pin to GND; pressed reads LOW</td></tr>
+            <tr><td>Buzzer silent</td><td>Wrong polarity or wrong pin</td><td>Buzzer positive to D6, negative to GND</td></tr>
+            <tr><td>Serial Monitor blank</td><td>Closed monitor or baud mismatch</td><td>Open Serial Monitor and select 9600 baud</td></tr>
+            <tr><td>Tinkercad simulation acts weird</td><td>Loose/incorrect virtual wiring</td><td>Stop simulation, inspect wires, restart simulation</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card"><h3>Day 1 Summary</h3><ul style="padding-left:20px;color:#475569"><li>You used variables to store pins and sensor values.</li><li>You used analog input to read potentiometer and LDR.</li><li>You used PWM to control LED brightness.</li><li>You used if/else to make automatic decisions.</li><li>You used buttons with INPUT_PULLUP.</li><li>You used arrays and loops in the Memory Lock Game.</li><li>You used Serial Monitor for debugging.</li></ul></div>
+        <div class="card"><h3>Preview of Day 2</h3><p>Next, these local circuits will start moving toward IoT communication. You will connect ESP32/ESP8266 to Wi-Fi, send/receive HTTP data, work with JSON, and begin the cloud-connected IoT pipeline.</p><div class="flow">Today: Arduino reads and controls locally
+      ↓
+Day 2: ESP connects to Wi-Fi and sends data
+      ↓
+Later: MQTT, dashboards, alerts, and final prototypes</div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+
+<footer>
+  <div class="container"><strong>Numa Digital Farm · IoT Workshop Day 1</strong><p>Arduino Programming Fundamentals · Tinkercad Circuits · Student Learning Handout</p></div>
+</footer>
+
+<script>
+  function copyCode(btn){
+    const code = btn.parentElement.querySelector('pre').innerText;
+    navigator.clipboard.writeText(code).then(()=>{
+      const old = btn.innerText;
+      btn.innerText='Copied';
+      setTimeout(()=>btn.innerText=old,1200);
+    }).catch(()=>alert('Copy failed. Select the code and copy manually.'));
+  }
+</script>
 </body>
 </html>
