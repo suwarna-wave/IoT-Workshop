@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Day 2 - IoT Workshop</title>
+  <title>Numa Digital Farm | Day 2 ESP32 Networking & HTTP Handout</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
     <div class="container navbar">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">2</span>
+      <a class="brand" href="index.html#home" aria-label="Go to home">
+        <span class="brand-mark">IoT</span>
         <span>
           Numa Digital Farm
-          <small>Day 2</small>
+          <small>8-Day IoT Workshop</small>
         </span>
       </a>
+      <section class="section" id="objectives">
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="index.html#home">Home</a>
         <a href="index.html#mentors">Mentors</a>
@@ -37,9 +38,576 @@
       </nav>
     </div>
   </header>
-  <main class="container">
-    <section class="hero"><div class="hero-grid"><div><div class="badge">Workshop Day 2</div><h1>Wi-Fi and HTTP</h1><p class="lead">This separate page is reserved for ESP networking, HTTP requests, JSON, and the first web API examples.</p><div class="actions"><a class="btn btn-primary" href="index.html">Back to Home</a><a class="btn btn-ghost" href="day0.html">Review Day 0</a></div></div><aside class="panel"><h3>Planned Topics</h3><ul style="padding-left:18px;"><li>Wi-Fi setup on ESP32</li><li>HTTP GET and POST</li><li>JSON payloads</li><li>Web server basics</li></ul></aside></div></section>
-    <section class="section"><div class="panel"><h2>Coming Soon</h2><p>Use this page for the Day 2 lesson without crowding the workshop home page.</p></div></section>
+  <main id="top">
+    <section class="hero"><div class="container hero-grid"><div><div class="eyebrow">🌐 Day 2 Hands-on Training · ESP32 Networking & HTTP</div><h1>Make your ESP32 <span class="gradient-text">talk to the internet.</span></h1><p class="lead">Today we move from local Arduino logic into real IoT communication. You will connect ESP32 to Wi-Fi, scan nearby networks, understand HTTP, fetch live weather, read DHT11 data, send JSON to a server, and host a live sensor dashboard from the ESP itself.</p><div class="hero-actions"><a href="#projects" class="btn btn-primary">Start Hands-on Projects →</a><a href="#setup" class="btn btn-outline">Setup Checklist</a></div><div class="chip-row" style="margin-top:18px"><span class="chip">Wi-Fi STA / AP</span><span class="chip">HTTP GET / POST</span><span class="chip">REST API</span><span class="chip">JSON</span><span class="chip">ESP Web Server</span><span class="chip">DHT11 Dashboard</span></div></div><aside class="hero-card"><div class="wifi-visual"><div class="wifi-rings"></div><div class="mini-board">ESP32</div><div class="signal-bars"><span></span><span></span><span></span><span></span></div><p style="position:relative;z-index:2;text-align:center;color:#caf0f8;font-weight:800">Sensor → ESP32 → Wi-Fi → HTTP/API/Web Dashboard</p></div></aside></div></section>
+    <section class="section" id="objectives"><div class="container"><div class="section-head"><div><h2>Learning Objectives</h2><p>By the end of this session, students should be able to build a complete ESP32 networking flow.</p></div></div><div class="grid-3"><div class="card"><h3>Connect</h3><p>Connect ESP32/ESP8266 to a Wi-Fi router in Station mode and print its IP address.</p></div><div class="card"><h3>Scan</h3><p>Scan nearby Wi-Fi networks, read SSID, RSSI signal strength, and encryption status.</p></div><div class="card"><h3>Request</h3><p>Use HTTP GET to fetch public API data such as live weather forecast text.</p></div><div class="card"><h3>Send</h3><p>Use HTTP POST to upload sensor data as JSON to a test endpoint or cloud server.</p></div><div class="card"><h3>Serve</h3><p>Host a web page from ESP32 and open it from a phone/laptop browser on the same network.</p></div><div class="card"><h3>Visualize</h3><p>Read DHT11 temperature/humidity and display it on a live web dashboard and JSON endpoint.</p></div></div></div></section>
+    <section class="section" id="setup"><div class="container"><div class="section-head"><div><h2>Before You Start</h2><p>Prepare these tools and libraries before the hands-on section begins.</p></div></div><div class="grid-2"><div class="card"><h3>Software Checklist</h3><ul><li>Arduino IDE 2.x</li><li>ESP32 board package by Espressif Systems</li><li>ESP8266 board package, only if using NodeMCU</li><li>Serial Monitor set to <strong>115200 baud</strong> for ESP examples</li><li>Postman or browser for API/web server routes</li><li>Tinkercad for sensor-circuit simulation where Wi-Fi is not needed</li></ul></div><div class="card"><h3>Library Checklist</h3><ul><li><code>WiFi.h</code> for ESP32 Wi-Fi</li><li><code>HTTPClient.h</code> for ESP32 HTTP GET/POST</li><li><code>WebServer.h</code> for ESP32 local web server</li><li><code>DHT.h</code> from <strong>DHT sensor library by Adafruit</strong></li><li><code>ArduinoJson.h</code> from <strong>ArduinoJson by Benoit Blanchon</strong></li></ul></div></div><div class="notice" style="margin-top:16px"><strong>ESP8266 replacement note:</strong> For ESP8266, replace <code>#include &lt;WiFi.h&gt;</code> with <code>#include &lt;ESP8266WiFi.h&gt;</code>, replace <code>#include &lt;WebServer.h&gt;</code> with <code>#include &lt;ESP8266WebServer.h&gt;</code>, and use <code>ESP8266WebServer server(80);</code>. HTTPClient usage may require a <code>WiFiClient</code> object in newer ESP8266 cores.</div></div></section>
+    <section class="section" id="concepts"><div class="container"><div class="section-head"><div><h2>Core Concepts from Scratch</h2><p>These are the concepts students must understand before copying any code.</p></div></div>
+      <div class="project"><h2>1. Wi-Fi Modes on ESP Boards</h2><p class="meta">ESP32 and ESP8266 have built-in Wi-Fi radios, making them suitable for IoT communication.</p><div class="table-wrap"><table><thead><tr><th>Mode</th><th>Meaning</th><th>Simple Explanation</th><th>IoT Use Case</th></tr></thead><tbody><tr><td>Station</td><td>STA</td><td>ESP connects to an existing router like a phone or laptop.</td><td>Cloud API, weather API, sensor upload</td></tr><tr><td>Access Point</td><td>AP</td><td>ESP becomes its own Wi-Fi hotspot. Phone/laptop connects to ESP.</td><td>Offline setup page, local control page</td></tr><tr><td>AP + Station</td><td>AP+STA</td><td>ESP connects to router and also creates a hotspot.</td><td>Configuration portal while staying online</td></tr></tbody></table></div><h3>Basic Wi-Fi Connection Pattern</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>#include &lt;WiFi.h&gt;   // ESP32
+// For ESP8266 use: #include &lt;ESP8266WiFi.h&gt;
+
+const char* ssid = "YourWiFiName";
+const char* password = "YourPassword";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWiFi Connected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+void loop() {}</pre></div><div class="callout"><strong>Key idea:</strong> An IP address is the ESP board's address on the network. When the ESP hosts a web server, students will type this IP address into a browser.</div></div>
+      <div class="project"><h2>2. HTTP Protocol</h2><p class="meta">HTTP is the language used by browsers, APIs, and many IoT devices to exchange data.</p><div class="flow">Client ESP32  →  HTTP Request  →  Server/API
+Client ESP32  ←  HTTP Response ←  Server/API
+
+Request = Method + URL + Headers + optional Body
+Response = Status Code + Headers + Body</div><div class="table-wrap"><table><thead><tr><th>Method</th><th>Purpose</th><th>IoT Example</th><th>Has Body?</th></tr></thead><tbody><tr><td>GET</td><td>Retrieve/read data</td><td>Fetch weather, config, server status</td><td>No</td></tr><tr><td>POST</td><td>Send/create data</td><td>Upload DHT11 reading to cloud</td><td>Yes</td></tr><tr><td>PUT</td><td>Replace/update full data</td><td>Update device settings</td><td>Yes</td></tr><tr><td>DELETE</td><td>Remove data</td><td>Delete old log</td><td>No</td></tr><tr><td>PATCH</td><td>Partial update</td><td>Change only one value</td><td>Yes</td></tr></tbody></table></div><div class="table-wrap"><table><thead><tr><th>Status Code</th><th>Meaning</th><th>What It Means for ESP</th></tr></thead><tbody><tr><td>200 OK</td><td>Success</td><td>Server accepted the request.</td></tr><tr><td>201 Created</td><td>Created</td><td>POST successfully saved data.</td></tr><tr><td>400 Bad Request</td><td>Wrong request</td><td>Check JSON body, header, or URL format.</td></tr><tr><td>401 Unauthorized</td><td>Auth required</td><td>API key or token needed.</td></tr><tr><td>404 Not Found</td><td>URL not found</td><td>Check endpoint spelling.</td></tr><tr><td>500 Server Error</td><td>Server problem</td><td>Backend failed; not always ESP's fault.</td></tr></tbody></table></div></div>
+      <div class="project"><h2>3. JSON for IoT</h2><p class="meta">JSON is a lightweight text format commonly used to send IoT sensor data.</p><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>{
+  "device_id": "esp32_001",
+  "temperature": 28.5,
+  "humidity": 65,
+  "unit": "celsius"
+}</pre></div><div class="grid-2"><div class="success"><strong>Use ArduinoJson when:</strong><br>Payload has multiple fields, nested objects, arrays, or should be reliable.</div><div class="notice"><strong>Use String concatenation only when:</strong><br>Payload is very small, flat, and used for quick classroom testing.</div></div></div>
+    </div></section>
+    <section class="section" id="projects"><div class="container"><div class="section-head"><div><h2>Hands-on Projects</h2><p>The project order moves from network discovery to API communication and finally to live sensor web transfer.</p></div></div><div class="grid-3" style="margin-bottom:24px"><div class="project-card"><span class="badge">Project 1</span><h3>Wi-Fi Scanner</h3><p>Scan networks and compare signal strength.</p></div><div class="project-card"><span class="badge">Project 2</span><h3>Wi-Fi Connection</h3><p>Connect to router and print IP address.</p></div><div class="project-card"><span class="badge">Project 3</span><h3>Live Weather API</h3><p>Fetch weather using HTTP GET.</p></div><div class="project-card"><span class="badge">Project 4</span><h3>ESP Web Server</h3><p>Serve a local dashboard/control page.</p></div><div class="project-card"><span class="badge">Project 5</span><h3>DHT11 Data Logger</h3><p>Read sensor and send JSON via HTTP POST.</p></div><div class="project-card"><span class="badge">Project 6</span><h3>Live Sensor Dashboard</h3><p>Show live DHT11 readings in browser and JSON API.</p></div></div>
+      <article class="project" id="p1"><h2>Project 1 — Wi-Fi Scanner</h2><p class="meta">Difficulty: Beginner · Hardware: ESP32/ESP8266 + USB only · Duration: 15 minutes</p><h3>Objective</h3><p>Scan available Wi-Fi networks nearby and print their SSID, RSSI signal strength, and encryption status to Serial Monitor.</p><div class="diagram-slot"><div><strong>Diagram Slot 1: Wi-Fi Scanner Setup</strong>Insert screenshot/photo here: ESP32 connected to laptop through USB, Serial Monitor open, nearby networks listed.</div></div><h3>RSSI Signal Strength Guide</h3><div class="table-wrap"><table><thead><tr><th>RSSI Value</th><th>Signal Quality</th><th>Meaning</th></tr></thead><tbody><tr><td>-30 dBm to -50 dBm</td><td>Excellent</td><td>Very close to router or strong signal.</td></tr><tr><td>-51 dBm to -67 dBm</td><td>Good</td><td>Stable for most IoT communication.</td></tr><tr><td>-68 dBm to -75 dBm</td><td>Weak</td><td>May work, but expect packet loss or delays.</td></tr><tr><td>Below -75 dBm</td><td>Poor</td><td>Move closer to router or improve antenna position.</td></tr></tbody></table></div><h3>ESP32 Code</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 1: Wi-Fi Network Scanner */
+#include &lt;WiFi.h&gt;
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(100);
+  Serial.println("=== Wi-Fi Scanner Ready ===");
+}
+
+void loop() {
+  Serial.println("\nScanning nearby Wi-Fi networks...");
+  int networkCount = WiFi.scanNetworks();
+  if (networkCount == 0) {
+    Serial.println("No networks found.");
+  } else {
+    Serial.print(networkCount);
+    Serial.println(" networks found:");
+    Serial.println("----------------------------------------");
+    for (int i = 0; i &lt; networkCount; i++) {
+      Serial.print(i + 1);
+      Serial.print(". SSID: ");
+      Serial.print(WiFi.SSID(i));
+      Serial.print(" | RSSI: ");
+      Serial.print(WiFi.RSSI(i));
+      Serial.print(" dBm | Security: ");
+      Serial.println(WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "Open" : "Encrypted");
+      delay(10);
+    }
+    Serial.println("----------------------------------------");
+  }
+  WiFi.scanDelete();
+  delay(10000);
+}</pre></div><h3>ESP8266 Changes</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>// Replace:
+#include &lt;WiFi.h&gt;
+// With:
+#include &lt;ESP8266WiFi.h&gt;
+// Encryption check:
+Serial.println(WiFi.encryptionType(i) == ENC_TYPE_NONE ? "Open" : "Encrypted");</pre></div><h3>Expected Output</h3><div class="code-box"><pre>Scanning nearby Wi-Fi networks...
+5 networks found:
+----------------------------------------
+1. SSID: HomeRouter | RSSI: -45 dBm | Security: Encrypted
+2. SSID: GuestNetwork | RSSI: -72 dBm | Security: Open
+----------------------------------------</pre></div><h3>Classroom Challenge</h3><ul><li>Find the strongest network and print <code>Best network: SSID_NAME</code>.</li><li>Count how many networks are open and how many are encrypted.</li><li>Move the ESP closer/farther from router and compare RSSI.</li></ul></article>
+      <article class="project" id="p2"><h2>Project 2 — Wi-Fi Connection with Reconnect Logic</h2><p class="meta">Difficulty: Beginner · Hardware: ESP32 + USB only · Duration: 20 minutes</p><h3>Objective</h3><p>Connect ESP32 to a Wi-Fi router, print IP address, and keep checking connection status.</p><div class="callout"><strong>Why this matters:</strong> All upcoming HTTP, weather, web server, and DHT11 data-transfer projects depend on stable Wi-Fi.</div><h3>ESP32 Code</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 2: ESP32 Wi-Fi Connection with Reconnect Logic */
+#include &lt;WiFi.h&gt;
+
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+unsigned long lastCheckTime = 0;
+const unsigned long checkInterval = 5000;
+
+void connectToWiFi() {
+  Serial.print("Connecting to Wi-Fi: ");
+  Serial.println(ssid);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED &amp;&amp; attempts &lt; 20) {
+    delay(500);
+    Serial.print(".");
+    attempts++;
+  }
+  Serial.println();
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("Wi-Fi connected successfully!");
+    Serial.print("IP Address: ");
+    Serial.println(WiFi.localIP());
+    Serial.print("Signal Strength: ");
+    Serial.print(WiFi.RSSI());
+    Serial.println(" dBm");
+  } else {
+    Serial.println("Wi-Fi connection failed. Check SSID/password.");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+  connectToWiFi();
+}
+
+void loop() {
+  if (millis() - lastCheckTime &gt;= checkInterval) {
+    lastCheckTime = millis();
+    Serial.print("Uptime: ");
+    Serial.print(millis() / 1000);
+    Serial.println(" seconds");
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.println("Wi-Fi disconnected! Reconnecting...");
+      WiFi.disconnect();
+      WiFi.reconnect();
+      delay(2000);
+      if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("Reconnected!");
+        Serial.println(WiFi.localIP());
+      }
+    } else {
+      Serial.println("Wi-Fi status: Connected");
+    }
+  }
+}</pre></div><h3>Common Mistakes</h3><ul><li>SSID and password are case-sensitive.</li><li>ESP32 works on 2.4 GHz Wi-Fi; some boards do not connect to 5 GHz-only networks.</li><li>If dots never stop printing, use a phone hotspot to test.</li></ul></article>
+      <article class="project" id="p3"><h2>Project 3 — Live Weather Forecast using HTTP GET</h2><p class="meta">Difficulty: Beginner-Intermediate · Hardware: ESP32 + Wi-Fi · Duration: 25 minutes</p><h3>Objective</h3><p>Fetch live weather text for a city using a public weather endpoint and print the response to Serial Monitor.</p><div class="flow">ESP32 → Wi-Fi Router → HTTP GET Request → Weather API → HTTP Response → Serial Monitor</div><h3>ESP32 Code</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 3: Live Weather via HTTP GET */
+#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+const char* city = "Kathmandu";
+unsigned long lastWeatherTime = 0;
+const unsigned long weatherInterval = 30000;
+
+String buildWeatherURL() {
+  String url = "http://wttr.in/";
+  url += city;
+  url += "?format=%l:+%C+%t+Feels+%f+Humidity+%h";
+  return url;
+}
+
+void connectToWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void fetchWeather() {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wi-Fi not connected. Cannot fetch weather.");
+    return;
+  }
+  HTTPClient http;
+  String url = buildWeatherURL();
+  Serial.println("\nRequesting weather from:");
+  Serial.println(url);
+  http.begin(url);
+  http.setTimeout(8000);
+  int responseCode = http.GET();
+  if (responseCode == 200) {
+    String weather = http.getString();
+    Serial.println("\nWeather Update");
+    Serial.println("--------------------------------");
+    Serial.println(weather);
+    Serial.println("--------------------------------");
+  } else {
+    Serial.print("HTTP Error Code: ");
+    Serial.println(responseCode);
+  }
+  http.end();
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+  connectToWiFi();
+  fetchWeather();
+}
+
+void loop() {
+  if (millis() - lastWeatherTime &gt;= weatherInterval) {
+    lastWeatherTime = millis();
+    fetchWeather();
+  }
+}</pre></div><h3>Expected Output</h3><div class="code-box"><pre>Weather Update
+--------------------------------
+Kathmandu: Partly cloudy +22°C Feels +22°C Humidity 58%
+--------------------------------</pre></div><div class="notice"><strong>API etiquette:</strong> Do not request every second. A 30-second or longer interval is better for public APIs.</div><h3>Student Challenge</h3><ul><li>Change city to your hometown.</li><li>Print <code>Weather request failed</code> when HTTP code is not 200.</li><li>Add a button later to fetch weather manually.</li></ul></article>
+      <article class="project" id="p4"><h2>Project 4 — ESP32 as a Web Server</h2><p class="meta">Difficulty: Intermediate · Hardware: ESP32 + Wi-Fi · Duration: 35 minutes</p><h3>Objective</h3><p>Make the ESP32 host a small website. Any phone/laptop on the same Wi-Fi can open the ESP's IP address and view the page.</p><div class="diagram-slot"><div><strong>Diagram Slot 2: ESP Web Server Flow</strong>Insert diagram here: Phone/Laptop browser → Router → ESP32 IP → HTML response.</div></div><h3>How It Works</h3><div class="flow">1. ESP32 connects to Wi-Fi.
+2. ESP32 starts a server on port 80.
+3. Browser opens http://ESP_IP_ADDRESS.
+4. ESP32 receives request.
+5. ESP32 sends HTML or JSON response.</div><h3>ESP32 Code: Web Server with LED Control + JSON Status</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 4: ESP32 Web Server with LED Control */
+#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+const int ledPin = 2;
+bool ledState = false;
+WebServer server(80);
+
+String buildHomePage() {
+  String statusText = ledState ? "ON" : "OFF";
+  String statusColor = ledState ? "#16a34a" : "#dc2626";
+  String html = "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;";
+  html += "&lt;meta name='viewport' content='width=device-width, initial-scale=1.0'&gt;";
+  html += "&lt;title&gt;ESP32 Web Server&lt;/title&gt;";
+  html += "&lt;style&gt;body{font-family:Arial;background:#0f172a;color:white;text-align:center;padding:30px;}";
+  html += ".card{max-width:420px;margin:auto;background:#1e293b;padding:25px;border-radius:18px;}";
+  html += ".status{font-size:42px;font-weight:bold;color:" + statusColor + ";}";
+  html += "a{display:inline-block;margin:10px;padding:12px 18px;border-radius:999px;text-decoration:none;color:white;font-weight:bold;}";
+  html += ".on{background:#16a34a}.off{background:#dc2626}.api{background:#0077b6}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;";
+  html += "&lt;div class='card'&gt;&lt;h1&gt;ESP32 Web Server&lt;/h1&gt;&lt;p&gt;Built-in LED Status&lt;/p&gt;";
+  html += "&lt;div class='status'&gt;" + statusText + "&lt;/div&gt;";
+  html += "&lt;a class='on' href='/led/on'&gt;Turn LED ON&lt;/a&gt;";
+  html += "&lt;a class='off' href='/led/off'&gt;Turn LED OFF&lt;/a&gt;";
+  html += "&lt;a class='api' href='/status'&gt;View JSON Status&lt;/a&gt;";
+  html += "&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;";
+  return html;
+}
+
+void handleRoot() { server.send(200, "text/html", buildHomePage()); }
+void handleLedOn() { ledState = true; digitalWrite(ledPin, HIGH); server.send(200, "text/html", buildHomePage()); }
+void handleLedOff() { ledState = false; digitalWrite(ledPin, LOW); server.send(200, "text/html", buildHomePage()); }
+void handleStatus() {
+  String json = "{\"led\":\"";
+  json += ledState ? "on" : "off";
+  json += "\",\"uptime_s\":" + String(millis() / 1000) + "}";
+  server.send(200, "application/json", json);
+}
+void handleNotFound() { server.send(404, "text/plain", "404: Page Not Found"); }
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nConnected!");
+  Serial.print("Open this URL in browser: http://");
+  Serial.println(WiFi.localIP());
+  server.on("/", handleRoot);
+  server.on("/led/on", handleLedOn);
+  server.on("/led/off", handleLedOff);
+  server.on("/status", handleStatus);
+  server.onNotFound(handleNotFound);
+  server.begin();
+  Serial.println("Web server started.");
+}
+
+void loop() { server.handleClient(); }</pre></div><div class="danger"><strong>Critical:</strong> If you forget <code>server.handleClient()</code> in <code>loop()</code>, the ESP will connect to Wi-Fi but the browser will not get a response.</div></article>
+      <article class="project" id="p5"><h2>Project 5 — DHT11 Interfacing and HTTP POST Data Logger</h2><p class="meta">Difficulty: Intermediate · Hardware: ESP32 + DHT11 · Duration: 35 minutes</p><h3>Objective</h3><p>Read real temperature and humidity from DHT11 and POST the data as JSON to a test server.</p><div class="diagram-slot"><div><strong>Diagram Slot 3: DHT11 Wiring</strong>Insert circuit diagram here: DHT11 VCC → 3.3V, DATA → GPIO4, 10kΩ pull-up DATA to VCC, GND → GND.</div></div><h3>DHT11 Pin Configuration</h3><div class="table-wrap"><table><thead><tr><th>DHT11 Pin</th><th>ESP32 Connection</th><th>ESP8266 Connection</th><th>Notes</th></tr></thead><tbody><tr><td>VCC</td><td>3.3V or 5V</td><td>3.3V</td><td>Use 3.3V for safer ESP logic.</td></tr><tr><td>DATA</td><td>GPIO 4</td><td>GPIO 4 / D2 on many NodeMCU boards</td><td>Add 10kΩ pull-up to VCC if bare DHT11 sensor.</td></tr><tr><td>NC</td><td>Not connected</td><td>Not connected</td><td>Only on 4-pin bare sensor.</td></tr><tr><td>GND</td><td>GND</td><td>GND</td><td>Common ground required.</td></tr></tbody></table></div><h3>ESP32 Code: DHT11 → HTTP POST JSON</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 5: DHT11 Sensor Data Logger via HTTP POST */
+#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+#include &lt;DHT.h&gt;
+#include &lt;ArduinoJson.h&gt;
+
+#define DHTPIN 4
+#define DHTTYPE DHT11
+
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+const char* serverUrl = "https://httpbin.org/post";
+
+DHT dht(DHTPIN, DHTTYPE);
+unsigned long lastPostTime = 0;
+const unsigned long postInterval = 10000;
+
+void connectToWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nConnected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void postSensorData(float temperature, float humidity) {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Wi-Fi disconnected. Reconnecting...");
+    WiFi.reconnect();
+    return;
+  }
+  HTTPClient http;
+  http.begin(serverUrl);
+  http.addHeader("Content-Type", "application/json");
+  http.setTimeout(10000);
+  StaticJsonDocument&lt;256&gt; doc;
+  doc["device"] = "ESP32_DHT11";
+  doc["temperature"] = temperature;
+  doc["humidity"] = humidity;
+  doc["unit"] = "celsius";
+  doc["uptime_s"] = millis() / 1000;
+  String jsonBody;
+  serializeJson(doc, jsonBody);
+  Serial.println("\nSending JSON:");
+  Serial.println(jsonBody);
+  int responseCode = http.POST(jsonBody);
+  Serial.print("HTTP Response Code: ");
+  Serial.println(responseCode);
+  if (responseCode &gt; 0) {
+    String response = http.getString();
+    Serial.println("Server response preview:");
+    Serial.println(response.substring(0, 220));
+  } else {
+    Serial.print("POST failed. Error code: ");
+    Serial.println(responseCode);
+  }
+  http.end();
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+  dht.begin();
+  connectToWiFi();
+  Serial.println("DHT11 HTTP POST Logger Started");
+}
+
+void loop() {
+  if (millis() - lastPostTime &gt;= postInterval) {
+    lastPostTime = millis();
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+    if (isnan(temperature) || isnan(humidity)) {
+      Serial.println("ERROR: Failed to read DHT11. Check wiring and pull-up resistor.");
+      return;
+    }
+    Serial.print("Temperature: "); Serial.print(temperature, 1);
+    Serial.print(" °C | Humidity: "); Serial.print(humidity, 1); Serial.println(" %");
+    postSensorData(temperature, humidity);
+  }
+}</pre></div><h3>Manual JSON Alternative</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>String jsonBody = "{\"temperature\":";
+jsonBody += String(temperature, 1);
+jsonBody += ",\"humidity\":";
+jsonBody += String(humidity, 1);
+jsonBody += "}";</pre></div><div class="notice"><strong>DHT11 timing:</strong> Do not read DHT11 too fast. Keep at least around 2 seconds between readings.</div></article>
+      <article class="project" id="p6"><h2>Project 6 — Live Sensor Web Transfer: ESP32 DHT11 Web Dashboard</h2><p class="meta">Difficulty: Intermediate-Advanced · Hardware: ESP32 + DHT11 · Duration: 45 minutes</p><h3>Objective</h3><p>Read DHT11 data and serve it through a styled web dashboard plus a JSON API endpoint.</p><div class="flow">DHT11 Sensor → ESP32 Reads Data → ESP32 WebServer → Browser Dashboard
+                                      ↘ /api JSON endpoint</div><h3>Routes</h3><div class="table-wrap"><table><thead><tr><th>Route</th><th>Type</th><th>Purpose</th></tr></thead><tbody><tr><td>/</td><td>HTML</td><td>Main dashboard page</td></tr><tr><td>/api</td><td>JSON</td><td>Returns live temperature/humidity data</td></tr><tr><td>Unknown route</td><td>Text</td><td>Returns 404 Not Found</td></tr></tbody></table></div><h3>ESP32 Code: Live Dashboard + JSON API</h3><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Day 2 Project 6: ESP32 Live Sensor Web Dashboard */
+#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+#include &lt;DHT.h&gt;
+
+#define DHTPIN 4
+#define DHTTYPE DHT11
+#define LED_PIN 2
+
+const char* ssid = "YourSSID";
+const char* password = "YourPassword";
+
+DHT dht(DHTPIN, DHTTYPE);
+WebServer server(80);
+
+float lastTemperature = 0.0;
+float lastHumidity = 0.0;
+bool sensorOk = false;
+unsigned long lastReadTime = 0;
+const unsigned long readInterval = 2000;
+
+String getComfortStatus(float temp, float hum) {
+  if (!sensorOk) return "Sensor Error";
+  if (temp &gt; 32) return "Hot";
+  if (temp &lt; 18) return "Cold";
+  if (hum &gt; 75) return "Humid";
+  return "Comfortable";
+}
+
+String buildDashboard() {
+  String status = getComfortStatus(lastTemperature, lastHumidity);
+  String badgeColor = sensorOk ? "#16a34a" : "#dc2626";
+  String html = "&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset='UTF-8'&gt;";
+  html += "&lt;meta name='viewport' content='width=device-width, initial-scale=1.0'&gt;";
+  html += "&lt;meta http-equiv='refresh' content='5'&gt;";
+  html += "&lt;title&gt;ESP32 DHT11 Dashboard&lt;/title&gt;";
+  html += "&lt;style&gt;body{margin:0;font-family:Arial;background:linear-gradient(135deg,#0f172a,#123a5f);color:white;text-align:center;}";
+  html += "header{padding:25px;background:#0077b6}.grid{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;padding:36px 18px;}";
+  html += ".card{width:230px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:24px;box-shadow:0 14px 32px rgba(0,0,0,.25);}";
+  html += ".value{font-size:48px;color:#90e0ef;font-weight:bold;margin:10px 0}.label{color:#cbd5e1;text-transform:uppercase;font-size:13px;letter-spacing:1px;}";
+  html += ".badge{display:inline-block;margin:10px;padding:10px 16px;border-radius:999px;font-weight:bold;background:" + badgeColor + ";}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;";
+  html += "&lt;header&gt;&lt;h1&gt;ESP32 Live Sensor Dashboard&lt;/h1&gt;&lt;p&gt;DHT11 Temperature and Humidity Monitor&lt;/p&gt;&lt;/header&gt;";
+  html += "&lt;div class='grid'&gt;";
+  html += "&lt;div class='card'&gt;&lt;div class='value'&gt;" + String(lastTemperature, 1) + "°C&lt;/div&gt;&lt;div class='label'&gt;Temperature&lt;/div&gt;&lt;/div&gt;";
+  html += "&lt;div class='card'&gt;&lt;div class='value'&gt;" + String(lastHumidity, 1) + "%&lt;/div&gt;&lt;div class='label'&gt;Humidity&lt;/div&gt;&lt;/div&gt;";
+  html += "&lt;/div&gt;&lt;div class='badge'&gt;" + status + "&lt;/div&gt;";
+  html += "&lt;p&gt;Auto-refresh every 5 seconds · JSON API: &lt;a style='color:#90e0ef' href='/api'&gt;/api&lt;/a&gt;&lt;/p&gt;";
+  html += "&lt;/body&gt;&lt;/html&gt;";
+  return html;
+}
+
+void readDHT11() {
+  if (millis() - lastReadTime &lt; readInterval) return;
+  lastReadTime = millis();
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  if (isnan(t) || isnan(h)) {
+    sensorOk = false;
+    Serial.println("DHT11 read failed.");
+    return;
+  }
+  lastTemperature = t;
+  lastHumidity = h;
+  sensorOk = true;
+  digitalWrite(LED_PIN, HIGH); delay(40); digitalWrite(LED_PIN, LOW);
+  Serial.print("Temperature: "); Serial.print(lastTemperature, 1);
+  Serial.print(" °C | Humidity: "); Serial.print(lastHumidity, 1); Serial.println(" %");
+}
+
+void handleRoot() { server.send(200, "text/html", buildDashboard()); }
+void handleAPI() {
+  String json = "{";
+  json += "\"temperature\":" + String(lastTemperature, 2);
+  json += ",\"humidity\":" + String(lastHumidity, 2);
+  json += ",\"sensor_ok\":" + String(sensorOk ? "true" : "false");
+  json += ",\"uptime_s\":" + String(millis() / 1000);
+  json += "}";
+  server.send(200, "application/json", json);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
+  dht.begin();
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to Wi-Fi");
+  while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print("."); }
+  Serial.println("\nConnected!");
+  Serial.print("Dashboard URL: http://"); Serial.println(WiFi.localIP());
+  Serial.print("API URL: http://"); Serial.print(WiFi.localIP()); Serial.println("/api");
+  server.on("/", handleRoot);
+  server.on("/api", handleAPI);
+  server.onNotFound([](){ server.send(404, "text/plain", "404: Page Not Found"); });
+  server.begin();
+  Serial.println("Web server started.");
+}
+
+void loop() {
+  readDHT11();
+  server.handleClient();
+}</pre></div><div class="danger"><strong>Teaching warning:</strong> This project includes a tiny <code>delay(40)</code> only for LED blink. Do not place long delays in a web server loop, because browser requests may become slow.</div></article>
+    </div></section>
+    <section class="section" id="tinkercad"><div class="container"><div class="section-head"><div><h2>Tinkercad Virtual Prototyping Activities</h2><p>Tinkercad does not simulate ESP Wi-Fi, so we use it to practice sensor logic before uploading network code to real ESP boards.</p></div></div><div class="notice"><strong>Limitation:</strong> Tinkercad Circuits mainly supports Arduino UNO/Nano simulation, not ESP32/ESP8266 Wi-Fi networking. Use Tinkercad for DHT/TMP36, LDR, button, LED logic. Use real ESP32 for Wi-Fi, HTTP, APIs, and web server.</div><div class="project"><h2>Tinkercad Activity 1 — Temperature Monitor Simulation</h2><p class="meta">Use TMP36 in Tinkercad as a simple temperature-sensor approximation before DHT11 hardware.</p><div class="steps"><div class="step">Create a new Tinkercad circuit.</div><div class="step">Add Arduino UNO.</div><div class="step">Add TMP36 temperature sensor.</div><div class="step">Wire TMP36 +V to 5V, GND to GND, OUT to A0.</div><div class="step">Add LED on pin 9 through 220Ω resistor to GND.</div><div class="step">Open Code → Text mode → paste the code → Start Simulation.</div></div><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Tinkercad Activity 1: Temperature Monitor using TMP36 and LED */
+const int SENSOR_PIN = A0;
+const int LED_PIN = 9;
+const float ALERT_TEMP = 30.0;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.println("=== Temperature Monitor Started ===");
+}
+
+float readTempC() {
+  int raw = analogRead(SENSOR_PIN);
+  float voltage = raw * (5.0 / 1023.0);
+  float tempC = (voltage - 0.5) * 100.0;
+  return tempC;
+}
+
+void loop() {
+  float temp = readTempC();
+  Serial.print("Temperature: ");
+  Serial.print(temp, 1);
+  Serial.println(" C");
+  if (temp &gt; ALERT_TEMP) {
+    digitalWrite(LED_PIN, HIGH);
+    Serial.println("ALERT: High temperature!");
+  } else {
+    digitalWrite(LED_PIN, LOW);
+  }
+  delay(1000);
+}</pre></div></div><div class="project"><h2>Tinkercad Activity 2 — Multi-Sensor Dashboard Simulation</h2><p class="meta">Simulate a multi-sensor IoT node using temperature, LDR, pushbutton, and LEDs.</p><div class="table-wrap"><table><thead><tr><th>Component</th><th>Tinkercad Name</th><th>Arduino Pin</th><th>Purpose</th></tr></thead><tbody><tr><td>Temperature Sensor</td><td>TMP36</td><td>A0</td><td>Temperature reading</td></tr><tr><td>Light Sensor</td><td>Photoresistor</td><td>A1</td><td>Light level reading</td></tr><tr><td>Push Button</td><td>Pushbutton</td><td>D7</td><td>Manual reading trigger</td></tr><tr><td>Red LED</td><td>LED</td><td>D13</td><td>Temperature alert</td></tr><tr><td>Green LED</td><td>LED</td><td>D12</td><td>Normal status</td></tr></tbody></table></div><div class="code-box"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre>/* Tinkercad Activity 2: Multi-Sensor Dashboard Simulation */
+const int TEMP_PIN = A0;
+const int LDR_PIN = A1;
+const int BUTTON_PIN = 7;
+const int RED_LED = 13;
+const int GREEN_LED = 12;
+int lastButtonState = LOW;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(BUTTON_PIN, INPUT);
+  Serial.println("Multi-Sensor Monitor Ready");
+  Serial.println("Press button for instant reading");
+}
+
+float readTempC() {
+  float voltage = analogRead(TEMP_PIN) * (5.0 / 1023.0);
+  return (voltage - 0.5) * 100.0;
+}
+
+String getLightLevel(int raw) {
+  if (raw &lt; 200) return "DARK";
+  if (raw &lt; 600) return "DIM";
+  return "BRIGHT";
+}
+
+void printSensorData() {
+  float temp = readTempC();
+  int ldrRaw = analogRead(LDR_PIN);
+  String light = getLightLevel(ldrRaw);
+  Serial.println("--- Sensor Reading ---");
+  Serial.print("Temperature: "); Serial.print(temp, 1); Serial.println(" C");
+  Serial.print("Light Raw: "); Serial.println(ldrRaw);
+  Serial.print("Light Level: "); Serial.println(light);
+  Serial.print("[JSON]: ");
+  Serial.println("{\"temp\":" + String(temp, 1) + ",\"light\":\"" + light + "\"}");
+  if (temp &gt; 28.0) {
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
+  } else {
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, HIGH);
+  }
+}
+
+void loop() {
+  int buttonState = digitalRead(BUTTON_PIN);
+  if (buttonState == HIGH &amp;&amp; lastButtonState == LOW) {
+    Serial.println("&gt;&gt;&gt; BUTTON PRESSED — Manual Read!");
+    printSensorData();
+  }
+  lastButtonState = buttonState;
+  static unsigned long lastTime = 0;
+  if (millis() - lastTime &gt;= 5000) {
+    printSensorData();
+    lastTime = millis();
+  }
+}</pre></div></div></div></section>
+    <section class="section" id="testing"><div class="container"><div class="section-head"><div><h2>Testing with Browser and Postman</h2><p>Use these tests to prove that the ESP server/API is working correctly.</p></div></div><div class="grid-2"><div class="card"><h3>Browser Tests</h3><ul><li>Open <code>http://ESP_IP/</code> to view dashboard.</li><li>Open <code>http://ESP_IP/api</code> to view JSON data.</li><li>Open <code>http://ESP_IP/led/on</code> to control LED.</li><li>Open <code>http://ESP_IP/led/off</code> to turn LED off.</li></ul></div><div class="card"><h3>Postman Tests</h3><ul><li>Select GET and enter <code>http://ESP_IP/api</code>.</li><li>Click Send and check status code 200.</li><li>For POST tests, choose Body → raw → JSON.</li><li>Check status code, response body, and returned JSON.</li></ul></div></div></div></section>
+    <section class="section" id="assignments"><div class="container"><div class="section-head"><div><h2>Assignments & Challenges</h2><p>Use these as group tasks, homework, or practical evaluation.</p></div></div><div class="grid-2"><div class="card"><h3>Assignment 1 — Wi-Fi Reconnect Logic</h3><ul><li>Connect to Wi-Fi and print IP address.</li><li>Check <code>WiFi.status()</code> every 5 seconds.</li><li>If disconnected, print warning and call <code>WiFi.reconnect()</code>.</li><li>Bonus: print uptime in seconds.</li></ul></div><div class="card"><h3>Assignment 2 — HTTP GET JSON Parse</h3><ul><li>Fetch <code>https://jsonplaceholder.typicode.com/todos/1</code>.</li><li>Use ArduinoJson to parse response.</li><li>Print <code>userId</code>, <code>id</code>, <code>title</code>, and <code>completed</code>.</li><li>Bonus: fetch <code>/users/1</code> and extract name, email, city.</li></ul></div><div class="card"><h3>Assignment 3 — Web Server LED Control</h3><ul><li>Create routes <code>/</code>, <code>/led/on</code>, <code>/led/off</code>, <code>/status</code>.</li><li>Use GPIO 5 with LED and 220Ω resistor.</li><li><code>/status</code> returns <code>{"led":"on"}</code> or <code>{"led":"off"}</code>.</li><li>Bonus: style page with green/red status indicator.</li></ul></div><div class="card"><h3>Assignment 4 — Environment Monitor Dashboard</h3><ul><li>Read DHT11 on GPIO 4.</li><li>Host live dashboard at <code>/</code>.</li><li>Return JSON at <code>/api/data</code> with temp, humidity, uptime.</li><li>POST reading to httpbin every 60 seconds.</li><li>Bonus: add heat index calculation.</li></ul></div></div></div></section>
+    <section class="section" id="cheatsheet"><div class="container"><div class="section-head"><div><h2>Day 2 Cheat Sheet</h2><p>Keep this quick reference open while coding and debugging.</p></div></div><div class="tabs"><button class="tab active" onclick="openTab(event,'wifiTab')">Wi-Fi</button><button class="tab" onclick="openTab(event,'httpTab')">HTTP Client</button><button class="tab" onclick="openTab(event,'serverTab')">Web Server</button><button class="tab" onclick="openTab(event,'errorsTab')">Errors</button></div><div id="wifiTab" class="tab-panel active"><div class="table-wrap"><table><thead><tr><th>Function</th><th>Library</th><th>Purpose</th></tr></thead><tbody><tr><td><code>WiFi.mode(WIFI_STA)</code></td><td>WiFi.h</td><td>Set ESP as Wi-Fi client.</td></tr><tr><td><code>WiFi.begin(ssid, pass)</code></td><td>WiFi.h</td><td>Connect to router.</td></tr><tr><td><code>WiFi.status()</code></td><td>WiFi.h</td><td>Check connection state.</td></tr><tr><td><code>WiFi.localIP()</code></td><td>WiFi.h</td><td>Get assigned IP address.</td></tr><tr><td><code>WiFi.softAP(ssid, pass)</code></td><td>WiFi.h</td><td>Start AP mode.</td></tr><tr><td><code>WiFi.RSSI()</code></td><td>WiFi.h</td><td>Read current signal strength.</td></tr></tbody></table></div></div><div id="httpTab" class="tab-panel"><div class="table-wrap"><table><thead><tr><th>Function</th><th>Purpose</th></tr></thead><tbody><tr><td><code>http.begin(url)</code></td><td>Set target URL.</td></tr><tr><td><code>http.addHeader(key,value)</code></td><td>Add request header.</td></tr><tr><td><code>http.GET()</code></td><td>Send GET request.</td></tr><tr><td><code>http.POST(body)</code></td><td>Send POST body.</td></tr><tr><td><code>http.getString()</code></td><td>Read response body.</td></tr><tr><td><code>http.end()</code></td><td>Free resources. Always call this.</td></tr></tbody></table></div></div><div id="serverTab" class="tab-panel"><div class="table-wrap"><table><thead><tr><th>Function</th><th>Purpose</th></tr></thead><tbody><tr><td><code>WebServer server(80)</code></td><td>Create server on port 80.</td></tr><tr><td><code>server.on(path,function)</code></td><td>Register route handler.</td></tr><tr><td><code>server.onNotFound(function)</code></td><td>Register 404 handler.</td></tr><tr><td><code>server.begin()</code></td><td>Start listening for requests.</td></tr><tr><td><code>server.handleClient()</code></td><td>Process incoming requests. Call repeatedly.</td></tr><tr><td><code>server.send(code,type,body)</code></td><td>Send HTTP response.</td></tr></tbody></table></div></div><div id="errorsTab" class="tab-panel"><div class="table-wrap"><table><thead><tr><th>Error / Symptom</th><th>Likely Cause</th><th>Fix</th></tr></thead><tbody><tr><td>Dots never stop printing</td><td>Wrong SSID/password</td><td>Check credentials; try phone hotspot.</td></tr><tr><td>HTTP Error -1</td><td>Cannot reach host</td><td>Check URL and internet.</td></tr><tr><td>HTTP Error -11</td><td>Connection refused</td><td>Server not running/wrong port.</td></tr><tr><td><code>isnan(temp)</code> true</td><td>DHT11 wiring issue</td><td>Check DATA, power, GND, pull-up.</td></tr><tr><td>Browser shows nothing</td><td>Forgot <code>server.handleClient()</code></td><td>Add it to loop.</td></tr><tr><td>Crash after requests</td><td>Missing <code>http.end()</code></td><td>Always call <code>http.end()</code>.</td></tr><tr><td>JSON parse fails</td><td>Response not valid JSON</td><td>Print raw response first.</td></tr><tr><td>Serial garbage</td><td>Baud mismatch</td><td>Use 115200 baud.</td></tr></tbody></table></div></div><div class="success" style="margin-top:18px"><strong>Day 2 Summary:</strong> You connected ESP to Wi-Fi, scanned networks, used HTTP GET and POST, served web pages, returned JSON, and built a live sensor dashboard. This is the foundation for MQTT and cloud dashboards in the next sessions.</div></div></section>
   </main>
+  <div class="quick-nav"><a href="#top">↑ Top</a><button onclick="window.print()">Print</button></div>
+  <footer class="footer">
+    <div class="container">
+      <div class="panel">
+        <strong>Numa Digital Farm</strong> · 8-Day IoT Workshop
+      </div>
+    </div>
+  </footer>
+  <script>function copyCode(button){const code=button.parentElement.querySelector('pre').innerText;navigator.clipboard.writeText(code).then(()=>{const old=button.innerText;button.innerText='Copied';setTimeout(()=>button.innerText=old,1300)}).catch(()=>alert('Copy failed. Please select and copy manually.'))}function openTab(event,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));event.currentTarget.classList.add('active');document.getElementById(id).classList.add('active')}</script>
 </body>
 </html>

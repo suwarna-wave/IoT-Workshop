@@ -862,3 +862,26 @@ tr:last-child td {
     min-width: 0;
   }
 }
+
+/* Day handout helpers (code cards, diagrams, TOC) */
+.code-card, .code-box {
+  background: linear-gradient(180deg,#071025,#0b1530);
+  color: #e6f3fb;
+  border-radius: 20px;
+  padding: 18px;
+  margin: 16px 0;
+  overflow-x: auto;
+  position: relative;
+  border: 1px solid rgba(37,99,235,0.12);
+  box-shadow: 0 12px 28px rgba(2,62,138,0.06);
+}
+.code-card pre { margin: 0; font-size: 13px; line-height: 1.6; white-space: pre; }
+.copy-btn { position: absolute; right: 12px; top: 12px; border: 0; border-radius: 999px; background: #10233a; color: #fff; padding: 7px 10px; cursor: pointer; font-weight: 900; font-size: 12px; }
+.copy-btn:hover { background: #164e63; }
+.diagram-frame { border: 1px solid var(--border); border-radius: 20px; padding: 14px; background: white; box-shadow: 0 12px 28px rgba(15,23,42,0.06); margin: 18px 0; }
+.diagram-placeholder { border: 2px dashed #93c5fd; border-radius: 20px; min-height: 220px; display: grid; place-items: center; text-align: center; padding: 24px; background: linear-gradient(135deg,#f0fbff,#fff); color: #164e63; }
+.toc { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+.toc a { padding: 12px; border-radius: 12px; background: white; border: 1px solid var(--border); font-weight: 900; color: #334155; box-shadow: 0 6px 18px rgba(15,23,42,0.04); text-align: center; }
+.toc a:hover { background: #eff6ff; color: var(--primary-dark); }
+
+@media (max-width: 920px) { .toc { grid-template-columns: repeat(2, 1fr); } }
